@@ -1,5 +1,6 @@
 'use client'
-import clsx from 'clsx'
+import { cn } from '@/lib/utils'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { RouteKey } from '@/types'
 
 const TABS = [
@@ -12,31 +13,36 @@ export function TabBar({ activeTab, routesGenerated, budgetAnswered, onTabChange
   activeTab: RouteKey; routesGenerated: RouteKey[]; budgetAnswered: boolean; onTabChange: (tab: RouteKey) => void
 }) {
   return (
-    <div className="flex gap-1 p-1 bg-[#f5f5f5] border border-[#e5e5e5] rounded-lg">
-      {TABS.map((tab) => {
-        const isActive = activeTab === tab.key
-        const isDone = routesGenerated.includes(tab.key)
-        const isLocked = tab.key === 'C' && !budgetAnswered
-        return (
-          <button key={tab.key} onClick={() => !isLocked && onTabChange(tab.key)} disabled={isLocked}
-            className={clsx(
-              'flex-1 flex flex-col items-start px-3 py-2.5 rounded-md transition-all duration-150 min-w-0',
-              isActive ? 'bg-white shadow-sm' : 'hover:bg-[#eeeeee]',
-              isLocked && 'opacity-40 cursor-not-allowed'
-            )}>
-            <div className="flex items-center gap-1.5 w-full">
-              <span className={clsx('text-xs font-mono shrink-0', isActive ? 'text-[#0a0a0a]' : 'text-[#999999]')}>{tab.key}</span>
-              <span className={clsx('text-sm font-medium truncate', isActive ? 'text-[#0a0a0a]' : 'text-[#555555]')}>{tab.label}</span>
-              {isDone && !isActive && <span className="ml-auto shrink-0 text-[#999999]"><DoneIcon /></span>}
-              {isLocked && <span className="ml-auto shrink-0 text-[#999999]"><LockIcon /></span>}
-            </div>
-            <span className="hidden sm:block text-xs text-[#999999] mt-0.5 truncate w-full">
-              {isLocked ? 'Answer budget question first' : tab.sub}
-            </span>
-          </button>
-        )
-      })}
-    </div>
+    <Tabs value={activeTab} className="w-full">
+      <TabsList className="w-full h-auto p-1">
+        {TABS.map((tab) => {
+          const isDone = routesGenerated.includes(tab.key)
+          const isLocked = tab.key === 'C' && !budgetAnswered
+          return (
+            <TabsTrigger
+              key={tab.key}
+              value={tab.key}
+              disabled={isLocked}
+              onClick={() => !isLocked && onTabChange(tab.key)}
+              className={cn(
+                'flex-1 flex flex-col items-start gap-0.5 px-3 py-2 h-auto rounded-md min-w-0',
+                isLocked && 'opacity-40 cursor-not-allowed'
+              )}
+            >
+              <div className="flex items-center gap-1.5 w-full">
+                <span className="text-xs font-mono shrink-0">{tab.key}</span>
+                <span className="text-sm font-medium truncate">{tab.label}</span>
+                {isDone && tab.key !== activeTab && <span className="ml-auto shrink-0 opacity-50"><DoneIcon /></span>}
+                {isLocked && <span className="ml-auto shrink-0 opacity-40"><LockIcon /></span>}
+              </div>
+              <span className="hidden sm:block text-xs text-muted-foreground truncate w-full text-left">
+                {isLocked ? 'Answer budget question first' : tab.sub}
+              </span>
+            </TabsTrigger>
+          )
+        })}
+      </TabsList>
+    </Tabs>
   )
 }
 

@@ -1,5 +1,6 @@
 'use client'
 import clsx from 'clsx'
+import { cn } from '@/lib/utils'
 import type { Q1Answer } from '@/types'
 
 const OPTIONS: { value: Q1Answer; label: string; sub: string }[] = [
@@ -12,20 +13,20 @@ export function Q1Stage({ value, onChange }: { value: Q1Answer | null; onChange:
   return (
     <div className="space-y-4">
       <div className="space-y-1.5">
-        <p className="text-xs text-[#999999] uppercase tracking-widest font-medium">01 / 04</p>
-        <h2 className="text-base font-medium text-[#0a0a0a] leading-snug">Where are you right now with your idea?</h2>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium">01 / 04</p>
+        <h2 className="text-base font-medium leading-snug">Where are you right now with your idea?</h2>
       </div>
       <div className="space-y-2">
         {OPTIONS.map((opt) => (
           <button key={opt.value} onClick={() => onChange(opt.value)}
-            className={clsx(
+            className={cn(
               'w-full text-left px-4 py-3.5 rounded-lg border transition-all duration-150',
               value === opt.value
-                ? 'border-black bg-[#f5f5f5]'
-                : 'border-[#e5e5e5] bg-white hover:border-[#cccccc]'
+                ? 'border-primary bg-muted'
+                : 'border-border bg-background hover:border-input hover:bg-muted/50'
             )}>
-            <p className={clsx('text-sm font-medium leading-snug', value === opt.value ? 'text-[#0a0a0a]' : 'text-[#555555]')}>{opt.label}</p>
-            <p className="text-xs text-[#999999] mt-0.5 leading-relaxed">{opt.sub}</p>
+            <p className={cn('text-sm font-medium leading-snug', value === opt.value ? 'text-foreground' : 'text-muted-foreground')}>{opt.label}</p>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{opt.sub}</p>
           </button>
         ))}
       </div>

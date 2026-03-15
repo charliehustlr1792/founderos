@@ -8,31 +8,16 @@
 @source "../components/**/*.{ts,tsx}";
 
 html, body {
-  background-color: #0a0a0a;
-  color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #333333; border-radius: 2px; }
+::-webkit-scrollbar-track { background: hsl(0 0% 98%); }
+::-webkit-scrollbar-thumb { background: hsl(0 0% 80%); border-radius: 2px; }
 
-::selection { background: #ffffff; color: #000000; }
-
-:focus-visible { outline: 1px solid #ffffff; outline-offset: 2px; }
-
-textarea, input {
-  background: transparent;
-  color: inherit;
-  font-family: inherit;
-}
-textarea:focus, input:focus { outline: none; }
+::selection { background: hsl(0 0% 10%); color: hsl(0 0% 98%); }
 
 :root {
   --background: oklch(1 0 0);

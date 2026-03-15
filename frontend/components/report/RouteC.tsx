@@ -2,7 +2,9 @@
 
 import { useFounderStore } from '@/store/useFounderStore'
 import { analytics } from '@/lib/analytics'
-import { Card } from '@/components/ui'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import {
   Section, BlogLink, StatusDot, CheckItem, CTABlock
 } from './ReportSections'
@@ -29,20 +31,20 @@ export function RouteCReport({ report }: Props) {
       <Section title="Spec completeness check">
         <div className="space-y-2">
           {report.specItems.map((item, i) => (
-            <Card key={i} className="p-4 flex items-start gap-3">
-              <StatusDot status={item.status} />
-              <div className="space-y-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="text-sm text-[#0a0a0a]">{item.label}</p>
-                  <StatusLabel status={item.status} />
+            <Card key={i}>
+              <CardContent className="p-4 flex items-start gap-3">
+                <StatusDot status={item.status} />
+                <div className="space-y-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-sm">{item.label}</p>
+                    <StatusLabel status={item.status} />
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{item.note}</p>
                 </div>
-                <p className="text-xs text-text-muted leading-relaxed">{item.note}</p>
-              </div>
+              </CardContent>
             </Card>
           ))}
         </div>
-
-        {/* Legend */}
         <div className="flex items-center gap-4 pt-1">
           <LegendItem status="defined"       label="Defined" />
           <LegendItem status="needs_clarity" label="Needs clarity" />
@@ -52,10 +54,10 @@ export function RouteCReport({ report }: Props) {
 
       {/* Team fit */}
       <Section title="What kind of team you need">
-        <Card className="p-5">
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {report.teamFit}
-          </p>
+        <Card>
+          <CardContent className="p-5">
+            <p className="text-sm text-muted-foreground leading-relaxed">{report.teamFit}</p>
+          </CardContent>
         </Card>
       </Section>
 
@@ -63,18 +65,18 @@ export function RouteCReport({ report }: Props) {
       <Section title="3-week POC roadmap">
         <div className="space-y-3">
           {report.roadmap.map((week) => (
-            <Card key={week.week} className="p-5 space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-mono text-[#999999] bg-[#f5f5f5] border border-[#e5e5e5] px-2 py-0.5 rounded">
-                  Week {week.week}
-                </span>
-                <p className="text-sm font-medium text-[#0a0a0a]">{week.title}</p>
-              </div>
-              <div className="space-y-2 pl-0">
-                {week.deliverables.map((d, i) => (
-                  <CheckItem key={i} text={d} />
-                ))}
-              </div>
+            <Card key={week.week}>
+              <CardContent className="p-5 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Badge variant="secondary" className="font-mono text-xs">Week {week.week}</Badge>
+                  <p className="text-sm font-medium">{week.title}</p>
+                </div>
+                <div className="space-y-2">
+                  {week.deliverables.map((d, i) => (
+                    <CheckItem key={i} text={d} />
+                  ))}
+                </div>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -82,15 +84,17 @@ export function RouteCReport({ report }: Props) {
 
       {/* Questions to ask any agency */}
       <Section title="Questions to ask any dev agency before you hire them">
-        <Card className="p-5 space-y-4">
-          {report.questionsToAskAgency.map((q, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <span className="text-xs font-mono text-[#999999] shrink-0 mt-0.5">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <p className="text-sm text-text-secondary leading-relaxed">{q}</p>
-            </div>
-          ))}
+        <Card>
+          <CardContent className="p-5 space-y-4">
+            {report.questionsToAskAgency.map((q, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="text-xs font-mono text-muted-foreground shrink-0 mt-0.5">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <p className="text-sm text-muted-foreground leading-relaxed">{q}</p>
+              </div>
+            ))}
+          </CardContent>
         </Card>
       </Section>
 
@@ -101,12 +105,7 @@ export function RouteCReport({ report }: Props) {
 
       {/* Budget-aware CTA */}
       <div className="pt-2" onClick={handleCTAClick}>
-        <CTABlock
-          headline={cta.headline}
-          sub={cta.sub}
-          buttonLabel={cta.buttonLabel}
-          href={cta.href}
-        />
+        <CTABlock headline={cta.headline} sub={cta.sub} buttonLabel={cta.buttonLabel} href={cta.href} />
       </div>
 
     </div>
@@ -144,24 +143,20 @@ function getCTA(budget: string | null) {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function StatusLabel({ status }: { status: string }) {
-  const config: Record<string, { label: string; className: string }> = {
-    defined:       { label: 'Defined',       className: 'text-[#0a0a0a] bg-[#f0f0f0]' },
-    needs_clarity: { label: 'Needs clarity', className: 'text-[#555555] bg-[#f5f5f5]' },
-    missing:       { label: 'Missing',       className: 'text-[#999999] bg-transparent border border-[#e5e5e5]' },
+  const variants: Record<string, { label: string; variant: 'default' | 'secondary' | 'outline' }> = {
+    defined:       { label: 'Defined',       variant: 'secondary' },
+    needs_clarity: { label: 'Needs clarity', variant: 'outline' },
+    missing:       { label: 'Missing',       variant: 'outline' },
   }
-  const c = config[status] ?? config.missing
-  return (
-    <span className={`text-xs px-2 py-0.5 rounded-sm font-medium ${c.className}`}>
-      {c.label}
-    </span>
-  )
+  const c = variants[status] ?? variants.missing
+  return <Badge variant={c.variant} className="text-xs">{c.label}</Badge>
 }
 
 function LegendItem({ status, label }: { status: 'defined' | 'needs_clarity' | 'missing'; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
       <StatusDot status={status} />
-      <span className="text-xs text-text-muted">{label}</span>
+      <span className="text-xs text-muted-foreground">{label}</span>
     </div>
   )
 }

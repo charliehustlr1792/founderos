@@ -1,10 +1,13 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import clsx from 'clsx'
+import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui'
 import { useRouter } from 'next/navigation'
+import { useState, useEffect, useRef } from 'react'
 import { useFounderStore } from '@/store/useFounderStore'
 import { api } from '@/lib/api'
 import { analytics } from '@/lib/analytics'
-import { Spinner } from '@/components/ui'
 import { Q1Stage } from './Q1Stage'
 import { Q2Idea } from './Q2Idea'
 import { Q3UserType } from './Q3UserType'
@@ -57,23 +60,24 @@ export function QuizShell() {
   return (
     <div>
       <Q1Stage value={quiz.q1} onChange={(val) => { setQ1(val); analytics.quizQ1Answered(sessionId, val) }} />
-      <div className="h-px bg-[#e5e5e5] my-8" />
+      <Separator className="my-8" />
       <Q2Idea value={quiz.q2} onChange={setQ2} />
-      <div className="h-px bg-[#e5e5e5] my-8" />
+      <Separator className="my-8" />
       <Q3UserType value={quiz.q3} onChange={(val) => { setQ3(val); analytics.quizQ3Answered(sessionId, val) }} />
-      <div className="h-px bg-[#e5e5e5] my-8" />
+      <Separator className="my-8" />
       <Q4Seriousness value={quiz.q4} onChange={(val) => { setQ4(val); analytics.quizQ4Answered(sessionId, val) }} />
 
       <div className="mt-10 space-y-3">
-        {error && <p className="text-sm text-[#aaaaaa]">{error}</p>}
-        <button
+        {error && <p className="text-sm text-muted-foreground">{error}</p>}
+        <Button
           onClick={handleSubmit}
           disabled={!isComplete || loading}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm font-medium transition-all duration-150 bg-black text-white hover:bg-black/85 active:bg-black/75 disabled:opacity-30 disabled:cursor-not-allowed"
+          size="lg"
+          className="w-full"
         >
           {loading ? <><Spinner size={14} /> Generating your report...</> : 'Generate my report →'}
-        </button>
-        <p className="text-xs text-[#555555] text-center">Takes about 5 minutes to read. No credit card. No spam.</p>
+        </Button>
+        <p className="text-xs text-muted-foreground text-center">Takes about 5 minutes to read. No credit card. No spam.</p>
       </div>
     </div>
   )

@@ -29,7 +29,7 @@ export async function sendReportEmail({
   const label = archetypeLabel[archetype] ?? 'Startup'
 
   const { data, error } = await resend.emails.send({
-    from: 'Founder OS <hello@creworklabs.com>',
+    from: 'Founder OS <onboarding@resend.dev>',
     to,
     subject: `Your ${label} founder report is ready`,
     html: `

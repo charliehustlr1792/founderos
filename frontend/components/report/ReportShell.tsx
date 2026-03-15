@@ -101,13 +101,9 @@ export function ReportShell() {
 
       {/* Header */}
       <div className="mb-8 space-y-1.5">
-        <h1 className="text-xl font-semibold text-[#0a0a0a] tracking-tight">
-          Your founder report
-        </h1>
+        <h1 className="text-xl font-semibold tracking-tight">Your founder report</h1>
         {quiz.q2 && (
-          <p className="text-sm text-[#999999] leading-relaxed line-clamp-2">
-            {quiz.q2}
-          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{quiz.q2}</p>
         )}
       </div>
 
@@ -148,7 +144,7 @@ function GeneratingState() {
   return (
     <div className="flex flex-col items-center justify-center py-24 space-y-4">
       <Spinner size={20} />
-      <p className="text-sm text-text-secondary">Generating your report...</p>
+      <p className="text-sm text-muted-foreground">Generating your report...</p>
     </div>
   )
 }
