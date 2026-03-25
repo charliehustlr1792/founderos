@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder OS — Full Report Wireframe</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --border: #e8e6e0;
+  --border-mid: #d1cec7;
+  --text-primary: #1a1917;
+  --text-secondary: #6b6860;
+  --text-tertiary: #a8a59f;
+  --green: #2d6a4f;
+  --green-bg: #e8f5ee;
+  --amber: #92400e;
+  --amber-bg: #fef3c7;
+  --red: #991b1b;
+  --red-bg: #fee2e2;
+  --blue: #1e40af;
+  --blue-bg: #eff6ff;
+  --accent: #1a1917;
+  --tag-bg: #f0ede8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body { font-family: 'Inter', sans-serif; color: var(--text-primary); background: var(--bg); font-size: 14px; line-height: 1.5; }
+
+/* ─── LAYOUT ─── */
+.shell { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; min-width: 220px; background: var(--surface); border-right: 0.5px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 6px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.main { flex: 1; padding: 2rem 2.5rem; max-width: 860px; overflow-x: hidden; }
+
+/* ─── SIDEBAR ─── */
+.sb-logo { font-size: 13px; font-weight: 600; padding: 0 6px; margin-bottom: 1.5rem; }
+.sb-logo span { color: var(--text-secondary); font-weight: 400; }
+.sb-section { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: 0 6px; margin: 12px 0 4px; }
+.sb-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 7px; font-size: 13px; cursor: pointer; color: var(--text-secondary); transition: all 0.12s; border: none; background: none; width: 100%; text-align: left; font-family: inherit; }
+.sb-item:hover { background: var(--bg); color: var(--text-primary); }
+.sb-item.active { background: var(--bg); color: var(--text-primary); font-weight: 500; }
+.sb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-mid); flex-shrink: 0; }
+.sb-dot.green { background: #34d399; }
+.sb-dot.amber { background: #fbbf24; }
+.sb-item.active .sb-dot { background: var(--text-primary); }
+.sb-divider { height: 0.5px; background: var(--border); margin: 8px 0; }
+.sb-idea { padding: 8px; background: var(--bg); border-radius: 8px; margin-top: auto; }
+.sb-idea-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
+.sb-idea-text { font-size: 12px; color: var(--text-primary); line-height: 1.4; }
+
+/* ─── PAGE HEADER ─── */
+.page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+.breadcrumb { font-size: 12px; color: var(--text-tertiary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.breadcrumb span { color: var(--text-primary); }
+.page-header h1 { font-size: 22px; font-weight: 600; line-height: 1.3; margin-bottom: 6px; }
+.page-header p { font-size: 14px; color: var(--text-secondary); max-width: 560px; }
+.header-meta { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.meta-tag { font-size: 11px; padding: 3px 10px; border-radius: 5px; background: var(--tag-bg); color: var(--text-secondary); font-weight: 500; }
+.score-pill { font-size: 12px; padding: 4px 12px; border-radius: 5px; font-weight: 600; }
+.score-pill.high { background: var(--green-bg); color: var(--green); }
+.score-pill.med { background: var(--amber-bg); color: var(--amber); }
+
+/* ─── SECTION LABEL ─── */
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 10px; }
+.section { margin-bottom: 2.5rem; }
+.section-heading { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.section-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+
+/* ─── STAT CARDS ─── */
+.stat-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 2rem; }
+.stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.stat-label { font-size: 11px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.stat-value { font-size: 24px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+.stat-value.green { color: var(--green); }
+.stat-value.amber { color: var(--amber); }
+.stat-delta { font-size: 11px; color: var(--text-tertiary); }
+.stat-delta.up { color: var(--green); }
+
+/* ─── CHART CARDS ─── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 2rem; }
+.chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 18px; }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.chart-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; }
+.chart-wrap { position: relative; height: 160px; }
+.chart-wrap.tall { height: 200px; }
+
+/* ─── SIGNAL TAGS ─── */
+.signal-grid { display: flex; flex-direction: column; gap: 8px; }
+.signal-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 9px; }
+.signal-body { flex: 1; }
+.signal-body strong { display: block; font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.signal-body span { font-size: 12px; color: var(--text-secondary); }
+.badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; align-self: flex-start; letter-spacing: 0.04em; text-transform: uppercase; }
+.badge.high { background: var(--green-bg); color: var(--green); }
+.badge.med { background: var(--amber-bg); color: var(--amber); }
+.badge.low { background: var(--red-bg); color: var(--red); }
+
+/* ─── COMMUNITY FEED ─── */
+.community-wrap { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2rem; }
+.community-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 0.5px solid var(--border); }
+.community-header-title { font-size: 13px; font-weight: 600; }
+.community-header-sub { font-size: 12px; color: var(--text-secondary); }
+.platform-tabs { display: flex; gap: 2px; padding: 10px 18px; border-bottom: 0.5px solid var(--border); overflow-x: auto; }
+.ptab { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 0.5px solid transparent; cursor: pointer; color: var(--text-secondary); background: none; font-family: inherit; white-space: nowrap; transition: all 0.12s; }
+.ptab:hover { background: var(--bg); color: var(--text-primary); }
+.ptab.active { background: var(--tag-bg); color: var(--text-primary); font-weight: 500; border-color: var(--border); }
+.post-list { padding: 12px 18px; display: flex; flex-direction: column; gap: 10px; }
+.post-item { padding-bottom: 10px; border-bottom: 0.5px solid var(--border); }
+.post-item:last-child { border-bottom: none; padding-bottom: 0; }
+.post-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.post-platform { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+.post-user { font-size: 11px; color: var(--text-tertiary); }
+.post-time { font-size: 11px; color: var(--text-tertiary); margin-left: auto; }
+.post-text { font-size: 13px; line-height: 1.5; color: var(--text-primary); margin-bottom: 6px; }
+.post-stats { display: flex; gap: 16px; }
+.post-stat { font-size: 11px; color: var(--text-tertiary); }
+.sentiment-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.sentiment-dot.pain { background: #f87171; }
+.sentiment-dot.want { background: #34d399; }
+.sentiment-dot.build { background: #60a5fa; }
+
+/* ─── COMPETITOR CARDS ─── */
+.comp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 2rem; }
+.comp-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.comp-top { padding: 14px 14px 10px; border-bottom: 0.5px solid var(--border); }
+.comp-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.comp-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--tag-bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); flex-shrink: 0; border: 0.5px solid var(--border); }
+.comp-name { font-size: 13px; font-weight: 600; }
+.comp-tagline { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+.comp-gap { padding: 10px 14px; }
+.comp-gap-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
+.comp-gap-text { font-size: 12px; color: var(--text-primary); line-height: 1.5; }
+
+/* ─── CHECKLIST ─── */
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.cl-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 9px; cursor: pointer; transition: background 0.12s; }
+.cl-item:hover { background: #fafaf8; }
+.cl-item.done { opacity: 0.55; }
+.cl-check { width: 17px; height: 17px; min-width: 17px; border: 1.5px solid var(--border-mid); border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.12s; }
+.cl-item.done .cl-check { background: var(--text-primary); border-color: var(--text-primary); }
+.cl-item.done .cl-check::after { content: '✓'; color: white; font-size: 10px; font-weight: 600; }
+.cl-item.done .cl-text { text-decoration: line-through; color: var(--text-tertiary); }
+.cl-text { font-size: 13px; line-height: 1.6; }
+.cl-num { font-size: 10px; font-weight: 600; color: var(--text-tertiary); font-family: 'DM Mono', monospace; margin-top: 2px; min-width: 18px; }
+
+/* ─── DIVIDER ─── */
+.divider { height: 0.5px; background: var(--border); margin: 2rem 0; }
+
+/* ─── PLANNING SECTION ─── */
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2rem; }
+.plan-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px; }
+.plan-card-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 8px; }
+.plan-card-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.plan-card-body { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.plan-card.accent { border-color: var(--text-primary); }
+.plan-card.accent .plan-card-label { color: var(--text-primary); }
+
+.insight-banner { background: var(--text-primary); color: white; border-radius: 10px; padding: 18px 20px; margin-bottom: 2rem; }
+.insight-banner p { font-size: 14px; line-height: 1.7; opacity: 0.9; }
+.insight-banner strong { opacity: 1; font-weight: 600; }
+
+.cta-row { display: flex; gap: 10px; margin-top: 2rem; }
+.btn-primary { flex: 1; padding: 12px 20px; background: var(--text-primary); color: white; border: none; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btn-primary:hover { background: #333; }
+.btn-ghost { flex: 1; padding: 12px 20px; background: transparent; color: var(--text-primary); border: 0.5px solid var(--border-mid); border-radius: 9px; font-size: 14px; cursor: pointer; font-family: inherit; }
+.btn-ghost:hover { background: var(--tag-bg); }
+
+/* ─── DEV ANNOTATIONS ─── */
+.ann { font-size: 11px; color: var(--text-secondary); border-left: 2px solid #fbbf24; padding: 4px 10px; margin-top: 8px; font-style: italic; background: #fffbeb; border-radius: 0 4px 4px 0; }
+
+/* ─── LEGEND ─── */
+.legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* ─── PLATFORM ICON COLORS ─── */
+.platform-reddit { color: #ff4500; font-weight: 700; }
+.platform-twitter { color: #1d9bf0; font-weight: 700; }
+.platform-ih { color: #0e7f6e; font-weight: 700; }
+.platform-linkedin { color: #0077b5; font-weight: 700; }
+
+/* SCROLLABLE */
+.post-list-scroll { max-height: 340px; overflow-y: auto; padding: 12px 18px; display: flex; flex-direction: column; gap: 10px; }
+.post-list-scroll::-webkit-scrollbar { width: 4px; }
+.post-list-scroll::-webkit-scrollbar-track { background: transparent; }
+.post-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sb-logo">Founder OS <span>by Crework</span></div>
+
+    <div class="sb-section">Your Report</div>
+    <button class="sb-item active" onclick="showSection('validate')">
+      <div class="sb-dot green"></div> Is there demand?
+    </button>
+    <button class="sb-item" onclick="showSection('plan')">
+      <div class="sb-dot amber"></div> What to build
+    </button>
+    <button class="sb-item" style="opacity:0.4; cursor:default;">
+      <div class="sb-dot"></div> How to start
+    </button>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-section">Deep dives</div>
+    <button class="sb-item"><div class="sb-dot"></div> Keyword trends</button>
+    <button class="sb-item"><div class="sb-dot"></div> Community signals</button>
+    <button class="sb-item"><div class="sb-dot"></div> Competitors</button>
+    <button class="sb-item"><div class="sb-dot"></div> Week 1 checklist</button>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-idea">
+      <div class="sb-idea-label">Your idea</div>
+      <div class="sb-idea-text">Marketplace to discover nail artists nearby</div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- ══════════════════════════════════════
+         SECTION 1 — VALIDATE
+    ══════════════════════════════════════ -->
+    <div id="section-validate">
+
+      <div class="page-header">
+        <div class="breadcrumb">Founder OS → <span>Is there demand?</span></div>
+        <h1>Strong demand signals for your nail artist marketplace</h1>
+        <p>We scanned keyword trends, Reddit, Twitter, and Indie Hackers to find real evidence that people want what you're building.</p>
+        <div class="header-meta">
+          <div class="meta-tag">Consumer · B2C</div>
+          <div class="meta-tag">Idea stage</div>
+          <div class="meta-tag">AI Product archetype</div>
+          <div class="score-pill high">Demand score 9.5 / 10</div>
+        </div>
+      </div>
+      <div class="ann">DEV NOTE: Headline + score dynamically generated from idea + quiz answers. Score is AI-computed from keyword volume, community signal count, and competitor gap analysis.</div>
+
+      <!-- STAT ROW -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-label">Keyword demand</div>
+          <div class="stat-value green">10</div>
+          <div class="stat-delta up">↑ High search volume</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Community buzz</div>
+          <div class="stat-value green">10</div>
+          <div class="stat-delta up">↑ Active discussions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Competitor gap</div>
+          <div class="stat-value green">10</div>
+          <div class="stat-delta up">↑ No clear winner</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Market timing</div>
+          <div class="stat-value amber">9</div>
+          <div class="stat-delta">→ Growing steadily</div>
+        </div>
+      </div>
+      <div class="ann">DEV NOTE: 4 stat cards. Values AI-scored 1–10. Delta label is plain English interpretation of the number, not a raw metric.</div>
+
+      <!-- ─── CHART 1: KEYWORD TRENDS ─── -->
+      <div class="section">
+        <div class="section-label">Search interest over time</div>
+        <div class="chart-card full">
+          <div class="chart-title">How often people are searching for what you're building</div>
+          <div class="chart-desc">Monthly search volume across related keywords — shows whether interest is growing, stable, or declining.</div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#1a1917;"></div> nail artist near me</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9ca3af;"></div> nail tech booking app</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#d1cec7;"></div> find nail artist</div>
+          </div>
+          <div class="chart-wrap tall"><canvas id="keywordChart"></canvas></div>
+        </div>
+        <div class="ann">DEV NOTE: Line chart showing ~12 months of keyword trend data pulled from Google Trends or a keyword API. 3 lines = primary keyword + 2 related. Chart.js line chart with no fill, clean axes.</div>
+      </div>
+
+      <!-- ─── CHART 2: COMMUNITY VOLUME ─── -->
+      <div class="section">
+        <div class="section-label">Where people are talking about this</div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-title">Discussion volume by platform</div>
+            <div class="chart-desc">How many posts mention this problem across communities.</div>
+            <div class="chart-wrap"><canvas id="platformChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Sentiment breakdown</div>
+            <div class="chart-desc">What emotion drives most of the conversation.</div>
+            <div class="legend" style="margin-bottom:10px;">
+              <div class="legend-item"><span class="sentiment-dot pain"></span> Pain / frustration</div>
+              <div class="legend-item"><span class="sentiment-dot want"></span> Wants a solution</div>
+              <div class="legend-item"><span class="sentiment-dot build"></span> Building one</div>
+            </div>
+            <div class="chart-wrap"><canvas id="sentimentChart"></canvas></div>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: Left = horizontal bar chart, platforms on Y axis. Right = doughnut. Both use neutral palette. "Pain / frustration" is your strongest validation signal — highlight it.</div>
+      </div>
+
+      <!-- ─── DEMAND SIGNALS ─── -->
+      <div class="section">
+        <div class="section-label">What people are searching and paying for right now</div>
+        <div class="signal-grid">
+          <div class="signal-row">
+            <div class="signal-body">
+              <strong>Apps to find and book local beauty services</strong>
+              <span>People actively searching with intent to book — not just browse. Budget available.</span>
+            </div>
+            <div class="badge high">High</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-body">
+              <strong>"Near me" discovery for service providers</strong>
+              <span>Location-based search is the dominant pattern. Existing apps have poor coverage outside major cities.</span>
+            </div>
+            <div class="badge high">High</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-body">
+              <strong>Alternatives to Instagram for finding nail artists</strong>
+              <span>People are using Instagram as a workaround — clear signal there's no dedicated product they love.</span>
+            </div>
+            <div class="badge high">High</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-body">
+              <strong>Nail artist portfolio + booking in one place</strong>
+              <span>Users want to see work and book without switching apps. Fragmented experience is the current pain.</span>
+            </div>
+            <div class="badge med">Medium</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-body">
+              <strong>Verified reviews for independent nail techs</strong>
+              <span>Trust is a barrier — freelance nail techs have no credible review layer the way restaurants do on Yelp.</span>
+            </div>
+            <div class="badge med">Medium</div>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: Signals AI-generated based on the founder's specific idea. Each has a plain-English buyer intent description. Badge = High / Medium / Low based on search volume + sentiment score.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ─── COMMUNITY FEED ─── -->
+      <div class="section">
+        <div class="section-label">Live conversations happening right now</div>
+
+        <div class="community-wrap">
+          <div class="community-header">
+            <div>
+              <div class="community-header-title">Where your future users are venting</div>
+              <div class="community-header-sub">Real posts from Reddit, Twitter, and Indie Hackers — filtered to your idea</div>
+            </div>
+            <div class="badge high">482 total posts found</div>
+          </div>
+
+          <div class="platform-tabs">
+            <button class="ptab active" onclick="filterPosts('all', this)">All platforms</button>
+            <button class="ptab" onclick="filterPosts('reddit', this)">Reddit</button>
+            <button class="ptab" onclick="filterPosts('twitter', this)">Twitter / X</button>
+            <button class="ptab" onclick="filterPosts('ih', this)">Indie Hackers</button>
+            <button class="ptab" onclick="filterPosts('linkedin', this)">LinkedIn</button>
+          </div>
+
+          <div class="post-list-scroll" id="post-feed">
+            <!-- ALL POSTS — filtered by JS -->
+            <div class="post-item" data-platform="reddit">
+              <div class="post-header">
+                <span class="platform-reddit">r/beauty</span>
+                <span class="post-user">· u/nailtech_lover</span>
+                <span class="post-time">3h ago</span>
+              </div>
+              <div class="post-text">Why is there still no good app to find nail artists in my city?? Instagram is a nightmare to search and Yelp only shows salons, not independents. I just want to see portfolios + book in one place.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 847</span>
+                <span class="post-stat">💬 64 comments</span>
+                <span class="post-stat"><span class="sentiment-dot pain"></span>Pain</span>
+              </div>
+            </div>
+            <div class="post-item" data-platform="twitter">
+              <div class="post-header">
+                <span class="platform-twitter">Twitter / X</span>
+                <span class="post-user">· @beautyfounder</span>
+                <span class="post-time">1d ago</span>
+              </div>
+              <div class="post-text">Show IH: built a simple tool for booking independent nail techs over the weekend. 3 paying customers already. The demand is clearly there — no one has cracked this properly.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 332</span>
+                <span class="post-stat">💬 28 comments</span>
+                <span class="post-stat"><span class="sentiment-dot build"></span>Building</span>
+              </div>
+            </div>
+            <div class="post-item" data-platform="reddit">
+              <div class="post-header">
+                <span class="platform-reddit">r/Entrepreneur</span>
+                <span class="post-user">· u/nail_mkt_idea</span>
+                <span class="post-time">2d ago</span>
+              </div>
+              <div class="post-text">Hot take: every existing marketplace is designed for salons, not independent artists. There are thousands of talented freelance nail techs with no discoverability layer. This is a massive gap.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 1.2k</span>
+                <span class="post-stat">💬 93 comments</span>
+                <span class="post-stat"><span class="sentiment-dot want"></span>Wants solution</span>
+              </div>
+            </div>
+            <div class="post-item" data-platform="ih">
+              <div class="post-header">
+                <span class="platform-ih">Indie Hackers</span>
+                <span class="post-user">· bootstrapped_91</span>
+                <span class="post-time">3d ago</span>
+              </div>
+              <div class="post-text">We tried every existing solution for local beauty discovery. Nothing fits freelancers. Might just build it ourselves — the API cost per booking would be tiny.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 562</span>
+                <span class="post-stat">💬 31 comments</span>
+                <span class="post-stat"><span class="sentiment-dot build"></span>Building</span>
+              </div>
+            </div>
+            <div class="post-item" data-platform="reddit">
+              <div class="post-header">
+                <span class="platform-reddit">r/beauty</span>
+                <span class="post-user">· u/chrome_nails</span>
+                <span class="post-time">4d ago</span>
+              </div>
+              <div class="post-text">I'm a nail tech and my entire business runs through Instagram DMs. It's exhausting. I would pay for an app that just handles discovery + booking for me.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 2.1k</span>
+                <span class="post-stat">💬 142 comments</span>
+                <span class="post-stat"><span class="sentiment-dot want"></span>Wants solution</span>
+              </div>
+            </div>
+            <div class="post-item" data-platform="linkedin">
+              <div class="post-header">
+                <span class="platform-linkedin">LinkedIn</span>
+                <span class="post-user">· @beauty_ops</span>
+                <span class="post-time">5d ago</span>
+              </div>
+              <div class="post-text">The independent beauty economy is growing 40% YoY but the tooling hasn't kept up. There's a massive gap between what Booksy offers salons and what a solo nail tech actually needs.</div>
+              <div class="post-stats">
+                <span class="post-stat">↑ 893</span>
+                <span class="post-stat">💬 47 comments</span>
+                <span class="post-stat"><span class="sentiment-dot want"></span>Wants solution</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 12px 18px; border-top: 0.5px solid var(--border);">
+            <a href="#" style="font-size: 12px; color: var(--text-secondary); text-decoration: none; border-bottom: 0.5px solid var(--border);">How to find and use these threads for user interviews →</a>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: Posts AI-generated specific to the founder's idea. Sentiment tag (Pain / Wants solution / Building) helps founders read the signal type at a glance. Platform filter tabs update the list in place.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ─── COMPETITORS ─── -->
+      <div class="section">
+        <div class="section-label">Who's already in this space — and where they fall short</div>
+        <div class="comp-grid">
+          <div class="comp-card">
+            <div class="comp-top">
+              <div class="comp-name-row">
+                <div class="comp-icon">B</div>
+                <div class="comp-name">Booksy</div>
+              </div>
+              <div class="comp-tagline">Booking platform built for salons and established studios</div>
+            </div>
+            <div class="comp-gap">
+              <div class="comp-gap-label">Your opening</div>
+              <div class="comp-gap-text">Designed for businesses, not independent artists. No portfolio discovery layer, no way to browse style or aesthetic.</div>
+            </div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-top">
+              <div class="comp-name-row">
+                <div class="comp-icon">Y</div>
+                <div class="comp-name">Yelp / Google</div>
+              </div>
+              <div class="comp-tagline">General-purpose local discovery for any service</div>
+            </div>
+            <div class="comp-gap">
+              <div class="comp-gap-label">Your opening</div>
+              <div class="comp-gap-text">Only surfaces registered businesses. Independent nail techs are invisible — no matter how skilled they are.</div>
+            </div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-top">
+              <div class="comp-name-row">
+                <div class="comp-icon">IG</div>
+                <div class="comp-name">Instagram</div>
+              </div>
+              <div class="comp-tagline">Where most nail techs currently build their audience</div>
+            </div>
+            <div class="comp-gap">
+              <div class="comp-gap-label">Your opening</div>
+              <div class="comp-gap-text">Great for portfolio, terrible for local discovery and booking. No location filter, no availability, no transactions.</div>
+            </div>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: Competitor cards AI-identified from idea. 3 per row. "Your opening" replaces "YOUR OPPORTUNITY" — warmer language.</div>
+      </div>
+
+      <!-- INSIGHT BANNER -->
+      <div class="insight-banner">
+        <p><strong>The real opportunity:</strong> Independent nail artists are running their entire business through Instagram DMs — a workflow clearly not designed for it. There's no product that combines discoverable portfolios, location search, and seamless booking for the freelance tier. You're not competing with Booksy. You're building what Booksy forgot to build.</p>
+      </div>
+      <div class="ann">DEV NOTE: Insight banner is the single most shareable line in the report. Should be ~2–3 sentences, written specifically about their idea by the AI. Dark background = high contrast for screenshots.</div>
+
+      <!-- WEEK 1 CHECKLIST -->
+      <div class="section">
+        <div class="section-label">Your next 7 days — do these before writing a line of code</div>
+        <div class="section-sub" style="margin-bottom: 14px;">These 5 steps will confirm whether this is worth building. Do them in order.</div>
+        <div class="checklist">
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num">01</div>
+            <div class="cl-check"></div>
+            <div class="cl-text">Find 5 independent nail techs on Instagram in your city. DM them and ask: "Would you pay for an app that got you bookings without you having to manage DMs?" Record exactly what they say.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num">02</div>
+            <div class="cl-check"></div>
+            <div class="cl-text">Build a fake listing page in Notion or Framer. Show a nail tech's portfolio, location, pricing, and a "Book" button. Send it to 5 potential customers and see if they click Book.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num">03</div>
+            <div class="cl-check"></div>
+            <div class="cl-text">Post on your local Facebook group or Nextdoor: "Looking for nail artists near [city] — where do you usually find them?" Count the responses and note where people currently look.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num">04</div>
+            <div class="cl-check"></div>
+            <div class="cl-text">Set up a 2-page waitlist site: page 1 for customers (find artists near you), page 2 for nail techs (get more bookings). Run a £20 Instagram ad to each. Measure which side converts better.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num">05</div>
+            <div class="cl-check"></div>
+            <div class="cl-text">Map your unit economics: if you take 10% commission per booking and the average booking is £50, you need 200 bookings/month to hit £1,000 MRR. Is that achievable with 20 nail techs each doing 10 bookings? Do the maths now.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ann">DEV NOTE: Checklist items written specifically for this idea — not generic. Numbered 01–05. Interactive tick. "Do the maths" callout in item 5 is intentional — non-technical founders often skip unit economics.</div>
+
+      <div class="cta-row">
+        <button class="btn-primary" onclick="showSection('plan')">Now decide what to build first →</button>
+        <button class="btn-ghost">Share this report</button>
+      </div>
+      <p style="margin-top: 10px; text-align: center; font-size: 12px; color: var(--text-tertiary);">Your biggest risk right now is execution, not demand. The signal is clear.</p>
+
+    </div><!-- /validate -->
+
+
+    <!-- ══════════════════════════════════════
+         SECTION 2 — PLANNING SUMMARY
+    ══════════════════════════════════════ -->
+    <div id="section-plan" style="display:none;">
+
+      <div class="page-header">
+        <div class="breadcrumb">Founder OS → Is there demand? → <span>What to build</span></div>
+        <h1>Here's what to build first — and what to skip</h1>
+        <p>Based on your demand signals, we've mapped out the smallest version of your product that can get real users and prove the model works.</p>
+        <div class="header-meta">
+          <div class="meta-tag">MVP scope</div>
+          <div class="meta-tag">Consumer · B2C</div>
+          <div class="score-pill high">Execution risk: Low</div>
+        </div>
+      </div>
+
+      <!-- BUILD / SKIP CARDS -->
+      <div class="section">
+        <div class="section-label">What to build vs what to skip in version 1</div>
+        <div class="plan-grid">
+          <div class="plan-card accent">
+            <div class="plan-card-label">✓ Build this first</div>
+            <div class="plan-card-title">Artist profile + portfolio</div>
+            <div class="plan-card-body">Name, location, style tags, photo gallery of past work. This is why people open the app — it needs to be beautiful and fast.</div>
+          </div>
+          <div class="plan-card accent">
+            <div class="plan-card-label">✓ Build this first</div>
+            <div class="plan-card-title">Location-based search</div>
+            <div class="plan-card-body">Simple map or list filtered by city/neighbourhood. This is the core unlock — no existing competitor does this well for independents.</div>
+          </div>
+          <div class="plan-card">
+            <div class="plan-card-label">→ Build in v2</div>
+            <div class="plan-card-title">In-app booking + payments</div>
+            <div class="plan-card-body">Powerful, but complex. Start by sending a WhatsApp or DM booking request. Automate payments once you have 50+ active artists.</div>
+          </div>
+          <div class="plan-card">
+            <div class="plan-card-label">→ Build in v2</div>
+            <div class="plan-card-title">Reviews and ratings</div>
+            <div class="plan-card-body">Critical for trust long-term, but not needed to get your first 20 artists onboarded. Focus on supply first.</div>
+          </div>
+          <div class="plan-card" style="opacity:0.6;">
+            <div class="plan-card-label">✗ Skip for now</div>
+            <div class="plan-card-title">AI style matching</div>
+            <div class="plan-card-body">A nice-to-have but not a need-to-have at this stage. Nail the basics first.</div>
+          </div>
+          <div class="plan-card" style="opacity:0.6;">
+            <div class="plan-card-label">✗ Skip for now</div>
+            <div class="plan-card-title">Subscription tiers for artists</div>
+            <div class="plan-card-body">Monetise through commission per booking first. Pricing tiers add friction before you've proven the core value.</div>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: 3 groups — Build first (accented border), Build in v2, Skip for now (dimmed). All AI-generated from the idea. Forces founder to focus, not just list features.</div>
+      </div>
+
+      <!-- CORE METRIC -->
+      <div class="section">
+        <div class="section-label">The one number that tells you it's working</div>
+        <div style="background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 8px;">
+          <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 8px;">Your north star metric</div>
+          <div style="font-size: 20px; font-weight: 600; margin-bottom: 6px;">Bookings completed per artist per month</div>
+          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">If each artist on your platform is getting more than 5 bookings/month through your app, you have a product worth building. Below 5, the discovery or trust layer isn't working yet — go back and talk to users before adding more features.</div>
+          <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="padding: 8px 14px; background: var(--green-bg); border-radius: 7px; font-size: 12px; color: var(--green); font-weight: 500;">Target: 5+ bookings/artist/month</div>
+            <div style="padding: 8px 14px; background: var(--tag-bg); border-radius: 7px; font-size: 12px; color: var(--text-secondary);">Track from day 1</div>
+          </div>
+        </div>
+        <div class="ann">DEV NOTE: North star metric is AI-derived from the business model and idea. One metric only — forces clarity. Green threshold + plain-English interpretation of what it means if they miss it.</div>
+      </div>
+
+      <!-- UNIT ECONOMICS -->
+      <div class="section">
+        <div class="section-label">Your path to £1,000 MRR</div>
+        <div class="chart-card">
+          <div class="chart-title">How many bookings you need at different commission rates</div>
+          <div class="chart-desc">Based on average nail appointment value of £50. Drag the slider in your head — at 10% commission, 200 bookings = £1k MRR.</div>
+          <div class="chart-wrap tall"><canvas id="economicsChart"></canvas></div>
+        </div>
+        <div class="ann">DEV NOTE: Bar chart showing bookings needed to hit £1k MRR at 5%, 10%, 15% commission rates. Static chart but interactive version could let founder adjust average booking value.</div>
+      </div>
+
+      <!-- RISK CALLOUT -->
+      <div class="insight-banner">
+        <p><strong>Your biggest risk isn't building the wrong product.</strong> It's the classic two-sided marketplace cold start: artists won't join without customers, and customers won't come without artists. Solve supply first — manually onboard 20 artists in one city before building the customer side. The demand is already there. Focus on getting the supply.</p>
+      </div>
+
+      <!-- 30 DAY ROADMAP -->
+      <div class="section">
+        <div class="section-label">30-day build plan</div>
+        <div class="checklist">
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num" style="color:var(--text-primary); font-weight:600;">W1</div>
+            <div class="cl-check"></div>
+            <div class="cl-text"><strong>Talk to 10 nail techs and 10 customers.</strong> Confirm they'd use this and what they'd pay. Don't build anything yet.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num" style="color:var(--text-primary); font-weight:600;">W2</div>
+            <div class="cl-check"></div>
+            <div class="cl-text"><strong>Build a no-code prototype</strong> in Framer or Webflow. Artist profile page + basic location search. Show it to 5 people and watch them use it.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num" style="color:var(--text-primary); font-weight:600;">W3</div>
+            <div class="cl-check"></div>
+            <div class="cl-text"><strong>Manually onboard 5 nail techs</strong> in one city. Help them set up their profiles. Send them your first 5 customers via DM. Close the loop by hand.</div>
+          </div>
+          <div class="cl-item" onclick="toggleCheck(this)">
+            <div class="cl-num" style="color:var(--text-primary); font-weight:600;">W4</div>
+            <div class="cl-check"></div>
+            <div class="cl-text"><strong>Measure your north star.</strong> Did any artist get 2+ bookings via your app? If yes — start building the real product. If no — go back to week 1 and find out why.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ann">DEV NOTE: 30-day roadmap with week labels instead of generic numbered items. Heavy on "don't build yet" in W1–W2 — counterintuitive but critical for non-technical founders who rush to code.</div>
+
+      <div class="cta-row">
+        <button class="btn-primary">Get your full execution plan →</button>
+        <button class="btn-ghost">Book a call with Crework</button>
+      </div>
+
+    </div><!-- /plan -->
+
+  </main>
+</div>
+
+<script>
+// ─── SECTION SWITCHING ───
+function showSection(id) {
+  ['validate','plan'].forEach(s => {
+    document.getElementById('section-' + s).style.display = s === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  const items = document.querySelectorAll('.sb-item');
+  if (id === 'validate') items[0].classList.add('active');
+  if (id === 'plan') items[1].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── COMMUNITY FILTER ───
+function filterPosts(platform, el) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.post-item').forEach(p => {
+    p.style.display = (platform === 'all' || p.dataset.platform === platform) ? 'block' : 'none';
+  });
+}
+
+// ─── CHECKLIST ───
+function toggleCheck(el) {
+  el.classList.toggle('done');
+}
+
+// ─── CHARTS ───
+const mono = "'DM Mono', monospace";
+const labelStyle = { color: '#a8a59f', font: { size: 11, family: "'Inter', sans-serif" } };
+const gridStyle = { color: '#e8e6e0', lineWidth: 0.5 };
+
+// Keyword Trends
+const months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+new Chart(document.getElementById('keywordChart'), {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        label: 'nail artist near me',
+        data: [42,45,51,58,63,61,67,59,54,70,78,85],
+        borderColor: '#1a1917',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: '#1a1917',
+        tension: 0.35,
+        fill: false
+      },
+      {
+        label: 'nail tech booking app',
+        data: [18,20,22,25,29,28,32,27,24,35,38,42],
+        borderColor: '#9ca3af',
+        borderWidth: 1.5,
+        pointRadius: 2,
+        pointBackgroundColor: '#9ca3af',
+        tension: 0.35,
+        fill: false
+      },
+      {
+        label: 'find nail artist',
+        data: [12,14,15,17,19,18,21,16,15,22,25,27],
+        borderColor: '#d1cec7',
+        borderWidth: 1.5,
+        pointRadius: 2,
+        pointBackgroundColor: '#d1cec7',
+        tension: 0.35,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      x: { ticks: labelStyle, grid: gridStyle, border: { display: false } },
+      y: {
+        ticks: { ...labelStyle, callback: v => v },
+        grid: gridStyle,
+        border: { display: false },
+        title: { display: true, text: 'Search interest (0–100)', color: '#a8a59f', font: { size: 11 } }
+      }
+    }
+  }
+});
+
+// Platform Volume
+new Chart(document.getElementById('platformChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Reddit', 'Twitter/X', 'Indie Hackers', 'LinkedIn', 'TikTok'],
+    datasets: [{
+      data: [187, 124, 68, 53, 50],
+      backgroundColor: ['#1a1917','#444441','#6b6860','#a8a59f','#d1cec7'],
+      borderRadius: 5,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.raw} posts` } } },
+    scales: {
+      x: { ticks: labelStyle, grid: gridStyle, border: { display: false } },
+      y: { ticks: labelStyle, grid: { display: false }, border: { display: false } }
+    }
+  }
+});
+
+// Sentiment Doughnut
+new Chart(document.getElementById('sentimentChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Pain / frustration', 'Wants a solution', 'Building one'],
+    datasets: [{
+      data: [54, 33, 13],
+      backgroundColor: ['#f87171','#34d399','#60a5fa'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '68%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => ` ${c.raw}% of posts` } }
+    }
+  }
+});
+
+// Unit Economics Bar
+new Chart(document.getElementById('economicsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['5% commission', '10% commission', '15% commission', '20% commission'],
+    datasets: [
+      {
+        label: 'Bookings to reach £1k MRR',
+        data: [400, 200, 133, 100],
+        backgroundColor: '#1a1917',
+        borderRadius: 6,
+        borderSkipped: false
+      },
+      {
+        label: 'Artists needed (10 bookings each)',
+        data: [40, 20, 14, 10],
+        backgroundColor: '#d1cec7',
+        borderRadius: 6,
+        borderSkipped: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: { boxWidth: 10, boxHeight: 10, font: { size: 11 }, color: '#6b6860', padding: 16 }
+      }
+    },
+    scales: {
+      x: { ticks: labelStyle, grid: { display: false }, border: { display: false } },
+      y: { ticks: labelStyle, grid: gridStyle, border: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
