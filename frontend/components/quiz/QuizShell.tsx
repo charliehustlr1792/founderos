@@ -87,20 +87,20 @@ export function QuizShell() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="mt-6 space-y-12">
       <Q1Stage value={quiz.q1} onChange={(val) => { setQ1(val); analytics.quizQ1Answered(sessionId, val) }} />
       <Q2Idea value={quiz.q2} onChange={setQ2} />
       <Q3UserType value={quiz.q3} onChange={(val) => { setQ3(val); analytics.quizQ3Answered(sessionId, val) }} />
       <Q4Seriousness value={quiz.q4} onChange={(val) => { setQ4(val); analytics.quizQ4Answered(sessionId, val) }} />
 
-      <div className="mt-2 space-y-3">
+      <div className="space-y-4 border-t border-[#DCD5C8]/80 pt-8">
         {error && (
           <p className="text-[12px] text-[#525252]" style={{ fontFamily: 'var(--font-geist-mono)' }}>{error}</p>
         )}
         <button
           onClick={handleSubmit}
           disabled={!isComplete || loading}
-          className="w-full h-[52px] rounded-[6px] bg-[#171717] text-white text-[15px] font-medium flex items-center justify-center transition-opacity disabled:opacity-40 hover:opacity-90"
+          className="h-13 w-full max-w-100 rounded-md bg-black px-8 text-center text-[13px] font-extrabold uppercase tracking-[0.16em] text-white shadow-[0_16px_22px_-10px_rgba(0,0,0,0.18)] transition-opacity disabled:opacity-40 hover:opacity-90"
           style={{ fontFamily: 'var(--font-geist-sans)' }}
         >
           {loading ? (
@@ -114,7 +114,7 @@ export function QuizShell() {
           )}
         </button>
         <p
-          className="text-[11px] text-[#a3a3a3] text-center tracking-[0.05em]"
+          className="text-[10px] tracking-widest text-[#5f6364]"
           style={{ fontFamily: 'var(--font-geist-mono)' }}
         >
           No credit card · No spam · 5 minutes

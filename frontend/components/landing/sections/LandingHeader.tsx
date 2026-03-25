@@ -8,7 +8,13 @@ export function LandingHeader({ fontClass }: LandingHeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#E7E2D7] bg-[#FEF9ED]/95 backdrop-blur-sm">
       <nav className="mx-auto flex h-15.5 w-full max-w-300 items-center justify-between px-5 sm:px-8">
-        <p className={`text-[20px] font-extrabold tracking-[-0.03em] text-[#020617] ${fontClass}`}>Founder OS</p>
+        <div className="gap-3 flex items-center ">
+          <img src="/logo.svg" alt="Crework Labs" className="h-6.5 w-6.5" />
+        <div className="leading-none">
+          <p className={`text-[20px] font-extrabold tracking-[-0.03em] text-[#020617] ${fontClass}`}>Founder OS</p>
+          <p className="mt-1 text-[10px] uppercase tracking-widest text-[#6f6b63]">A Product of CREWORK LABS</p>
+        </div>
+        </div>
 
         <div className={`hidden items-center gap-7 md:flex ${fontClass}`}>
           <a href="#blueprint" className="border-b-2 border-[#020617] pb-1 text-[14px] font-bold leading-6 text-[#020617]">
