@@ -29,7 +29,11 @@ export function ReportSidebar({ section, setSection, ideaText }: SidebarProps) {
     { key: 'plan', label: 'How to start?' },
   ]
 
-  const deepDives = ['Keyword trends', 'Community signals', 'Competitors', 'Week 1 checklist']
+  const onThisPageItems: Record<ReportSection, string[]> = {
+    validate: ['Keyword trends', 'Community signals', 'Competitors', 'Week 1 checklist'],
+    scope: ['Your core loop', 'Feature matrix', 'Tech stack', 'How to get first users'],
+    plan: ['30-day roadmap', 'Build or hire?', 'North star metric', 'Download report'],
+  }
 
   return (
     <aside className="fixed left-0 top-0 hidden h-screen w-55 border-r border-[#e8e6e0] bg-white px-4 py-6 lg:flex lg:flex-col">
@@ -46,8 +50,8 @@ export function ReportSidebar({ section, setSection, ideaText }: SidebarProps) {
       ))}
 
       <div className="my-4 h-px bg-[#e8e6e0]" />
-      <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#a8a59f]">Deep dives</p>
-      {deepDives.map((item) => (
+      <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#a8a59f]">On this page</p>
+      {onThisPageItems[section].map((item) => (
         <p key={item} className="mb-1 rounded-md px-2 py-1.5 text-[12px] text-[#6b6860]">{item}</p>
       ))}
 
@@ -83,14 +87,24 @@ export function ReportMobileNav({ section, setSection }: { section: ReportSectio
 }
 
 export function ReportHeader({ section }: HeaderProps) {
+  const serifFontClass = 'font-[family-name:var(--font-instrument-serif)]'
+
   return (
     <header className="mb-10 border-b border-[#e8e6e0] pb-7">
       <p className="mb-3 text-[11px] text-[#9e9b93]">
         Founder OS -&gt; {section === 'validate' ? 'Is there demand?' : section === 'scope' ? 'What to build?' : 'How to start?'}
       </p>
-      <h1 className="mb-2 text-[31px] leading-[1.22] tracking-[-0.01em]" style={{ fontFamily: 'Georgia, serif' }}>
+      <h1
+        className="mb-2 text-[31px] leading-[1.22] tracking-[-0.01em]"
+        style={section === 'scope' ? undefined : { fontFamily: 'Georgia, serif' }}
+      >
         {section === 'validate' && 'Strong demand signals for your startup idea'}
-        {section === 'scope' && 'Here is your v1. Everything else is v2.'}
+        {section === 'scope' && (
+          <>
+            <span className="block text-[52px] leading-[1.04]">Here's your v1.</span>
+              <span className={`block text-[68px] font-normal italic leading-[0.92] tracking-[-0.018em] text-[#5b5750] ${serifFontClass}`}>Everything else is v2.</span>
+          </>
+        )}
         {section === 'plan' && 'Your 30-day plan from idea to first users.'}
       </h1>
       <p className="max-w-160 text-[14px] leading-[1.7] text-[#5a574f]">

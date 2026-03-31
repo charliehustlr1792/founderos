@@ -6,10 +6,10 @@ import { api } from '@/lib/api'
 import { analytics } from '@/lib/analytics'
 import type { Archetype } from '@/types'
 import { PlanSection } from '@/components/report/page/PlanSection'
-import { ScopeSection } from '@/components/report/page/ScopeSection'
 import { ValidateSection } from '@/components/report/page/ValidateSection'
 import { ReportHeader, ReportLoading, ReportMobileNav, ReportSidebar } from '@/components/report/page/shared'
 import { fallbackPosts, toFeedPost, type FeedPost, type ReportSection } from '@/components/report/page/types'
+import { ScopeSection } from '../../components/report/page/ScopeSection'
 
 const FALLBACK_ARCHETYPE: Archetype = 'marketplace'
 
@@ -298,7 +298,7 @@ export default function ReportPage() {
           ideaText={quiz.q2 || 'Marketplace to discover nail artists nearby'}
         />
 
-        <section className="w-full px-4 py-6 sm:px-5 md:px-6 md:py-8 lg:ml-[220px] lg:px-8">
+        <section className="w-full px-4 py-6 sm:px-5 md:px-6 md:py-8 lg:ml-55 lg:px-8">
           <div className="mx-50 max-w-190">
             <ReportMobileNav section={section} setSection={setSection} />
             <ReportHeader section={section} />
