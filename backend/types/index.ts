@@ -132,12 +132,46 @@ export type RoadmapWeek = {
   deliverables: string[]
 }
 
+export type BuildDecisionGroup = 'build_first' | 'build_v2' | 'skip_for_now'
+
+export type BuildDecisionItem = {
+  group: BuildDecisionGroup
+  title: string
+  body: string
+}
+
+export type UnitEconomicsPoint = {
+  commissionLabel: string
+  bookingsToTarget: number
+  artistsNeeded: number
+}
+
+export type WhatToBuildPlan = {
+  buildDecisions: BuildDecisionItem[]
+  northStarMetric: {
+    metric: string
+    explanation: string
+    target: string
+    trackingNote: string
+  }
+  unitEconomics: {
+    title: string
+    description: string
+    points: UnitEconomicsPoint[]
+  }
+  riskCallout: {
+    title: string
+    body: string
+  }
+}
+
 export type ReportC = {
   archetype: Archetype
   specItems: SpecItem[]              // completeness check
   teamFit: string                    // plain English team recommendation
   roadmap: RoadmapWeek[]            // 3 weeks
   questionsToAskAgency: string[]     // exactly 5
+  whatToBuildPlan?: WhatToBuildPlan
   blogLinks: BlogLink[]
 }
 

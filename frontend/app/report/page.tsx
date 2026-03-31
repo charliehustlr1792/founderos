@@ -283,12 +283,6 @@ export default function ReportPage() {
     overall: 9,
   }
 
-  const roadmap = reportC?.roadmap ?? [
-    { week: 1, title: 'Customer proof sprint', deliverables: ['Interview 10 users', 'Launch waitlist page', 'Collect first 25 signups'] },
-    { week: 2, title: 'Foundation setup', deliverables: ['Set up auth + DB', 'Map core entities', 'Deploy a live preview'] },
-    { week: 3, title: 'Core workflow release', deliverables: ['Ship top flow end-to-end', 'Run 5 usability tests', 'Launch to first users'] },
-  ]
-
   return (
     <main className="min-h-screen bg-[#f7f6f3] text-[#1a1917]">
       <div className="min-h-screen w-full">
@@ -348,8 +342,6 @@ export default function ReportPage() {
               <PlanSection
                 reportC={reportC}
                 gateUnlocked={gateUnlocked}
-                roadmap={roadmap}
-                onBackScope={() => setSection('scope')}
               />
             )}
           </div>

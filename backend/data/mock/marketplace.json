@@ -285,6 +285,60 @@
       "Who owns the database schema and infrastructure at handover — and what does it cost to make changes independently after the engagement ends?",
       "What's the one thing marketplace founders get wrong that you always flag at the start of an engagement?"
     ],
+    "whatToBuildPlan": {
+      "buildDecisions": [
+        {
+          "group": "build_first",
+          "title": "Artist profile + portfolio",
+          "body": "Name, location, style tags, photo gallery of past work. This is why people open the app - it needs to be beautiful and fast."
+        },
+        {
+          "group": "build_first",
+          "title": "Location-based search",
+          "body": "Simple map or list filtered by city or neighbourhood. This is the core unlock - no existing competitor does this well for independents."
+        },
+        {
+          "group": "build_v2",
+          "title": "In-app booking + payments",
+          "body": "Powerful, but complex. Start by sending a WhatsApp or DM booking request. Automate payments once you have 50+ active artists."
+        },
+        {
+          "group": "build_v2",
+          "title": "Reviews and ratings",
+          "body": "Critical for trust long-term, but not needed to get your first 20 artists onboarded. Focus on supply first."
+        },
+        {
+          "group": "skip_for_now",
+          "title": "AI style matching",
+          "body": "A nice-to-have but not a need-to-have at this stage. Nail the basics first."
+        },
+        {
+          "group": "skip_for_now",
+          "title": "Subscription tiers for artists",
+          "body": "Monetise through commission per booking first. Pricing tiers add friction before you have proven core value."
+        }
+      ],
+      "northStarMetric": {
+        "metric": "Bookings completed per artist per month",
+        "explanation": "If each artist on your platform is getting more than 5 bookings per month through your app, you have a product worth building. Below 5, your discovery or trust layer is not working yet.",
+        "target": "Target: 5+ bookings/artist/month",
+        "trackingNote": "Track from day 1"
+      },
+      "unitEconomics": {
+        "title": "How many bookings you need at different commission rates",
+        "description": "Based on average appointment value of 50. At 10% commission, 200 bookings = 1k MRR.",
+        "points": [
+          { "commissionLabel": "5% commission", "bookingsToTarget": 400, "artistsNeeded": 40 },
+          { "commissionLabel": "10% commission", "bookingsToTarget": 200, "artistsNeeded": 20 },
+          { "commissionLabel": "15% commission", "bookingsToTarget": 133, "artistsNeeded": 14 },
+          { "commissionLabel": "20% commission", "bookingsToTarget": 100, "artistsNeeded": 10 }
+        ]
+      },
+      "riskCallout": {
+        "title": "Your biggest risk isn't building the wrong product.",
+        "body": "It's the classic two-sided marketplace cold start: artists won't join without customers, and customers won't come without artists. Solve supply first."
+      }
+    },
     "blogLinks": [
       {
         "label": "The perfect vibe coding stack for building your MVP in 2026",

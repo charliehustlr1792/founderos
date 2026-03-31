@@ -32,7 +32,7 @@ export function ReportSidebar({ section, setSection, ideaText }: SidebarProps) {
   const onThisPageItems: Record<ReportSection, string[]> = {
     validate: ['Keyword trends', 'Community signals', 'Competitors', 'Week 1 checklist'],
     scope: ['Your core loop', 'Feature matrix', 'Tech stack', 'How to get first users'],
-    plan: ['30-day roadmap', 'Build or hire?', 'North star metric', 'Download report'],
+    plan: ['Build vs skip', 'North star metric', 'Unit economics', '30-day build plan'],
   }
 
   return (
@@ -92,7 +92,7 @@ export function ReportHeader({ section }: HeaderProps) {
   return (
     <header className="mb-10 border-b border-[#e8e6e0] pb-7">
       <p className="mb-3 text-[11px] text-[#9e9b93]">
-        Founder OS -&gt; {section === 'validate' ? 'Is there demand?' : section === 'scope' ? 'What to build?' : 'How to start?'}
+        Founder OS -&gt; {section === 'validate' ? 'Is there demand?' : section === 'scope' ? 'What to build?' : 'What to build'}
       </p>
       <h1
         className="mb-2 text-[31px] leading-[1.22] tracking-[-0.01em]"
@@ -105,12 +105,12 @@ export function ReportHeader({ section }: HeaderProps) {
               <span className={`block text-[68px] font-normal italic leading-[0.92] tracking-[-0.018em] text-[#5b5750] ${serifFontClass}`}>Everything else is v2.</span>
           </>
         )}
-        {section === 'plan' && 'Your 30-day plan from idea to first users.'}
+        {section === 'plan' && "Here's what to build first - and what to skip"}
       </h1>
       <p className="max-w-160 text-[14px] leading-[1.7] text-[#5a574f]">
         {section === 'validate' && 'We scanned keyword trends and community conversations to find real evidence that people want what you are building.'}
         {section === 'scope' && 'This section maps your core loop, the features to prioritize, and what to defer so your first release is shippable.'}
-        {section === 'plan' && 'A practical step-by-step path to launch quickly, validate with real users, and avoid overbuilding too early.'}
+        {section === 'plan' && 'Based on your demand signals, this maps the smallest version to ship first and what to defer until v2.'}
       </p>
     </header>
   )
