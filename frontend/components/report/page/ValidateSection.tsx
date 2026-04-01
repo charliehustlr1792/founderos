@@ -148,28 +148,34 @@ export function ValidateSection({
             ))}
           </div>
           <div className="space-y-3 px-5 py-4">
-            {filteredPosts.map((post) => (
-              <article key={`${post.platform}-${post.user}-${post.time}`} className="border-b border-[#e8e6e0] pb-3 last:border-b-0 last:pb-0">
-                <div className="mb-1 flex items-center gap-2 text-[11px] text-[#a8a59f]">
-                  <span
-                    className={`font-semibold ${post.platform === 'reddit' ? 'text-[#ff4500]' : post.platform === 'twitter' ? 'text-[#1d9bf0]' : post.platform === 'ih' ? 'text-[#0e7f6e]' : 'text-[#0077b5]'}`}
-                  >
-                    {post.source}
-                  </span>
-                  <span>·</span>
-                  <span>{post.user}</span>
-                  <span className="ml-auto">{post.time}</span>
-                </div>
-                <p className="mb-2 text-[13px] leading-6">{post.text}</p>
-                <div className="flex items-center gap-3 text-[11px] text-[#a8a59f]">
-                  <span>{post.stats}</span>
-                  <span className="inline-flex items-center gap-1">
-                    <span className={`size-2 rounded-full ${moodColor[post.mood]}`} />
-                    {post.mood}
-                  </span>
-                </div>
-              </article>
-            ))}
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <article key={`${post.platform}-${post.user}-${post.time}`} className="border-b border-[#e8e6e0] pb-3 last:border-b-0 last:pb-0">
+                  <div className="mb-1 flex items-center gap-2 text-[11px] text-[#a8a59f]">
+                    <span
+                      className={`font-semibold ${post.platform === 'reddit' ? 'text-[#ff4500]' : post.platform === 'twitter' ? 'text-[#1d9bf0]' : post.platform === 'ih' ? 'text-[#0e7f6e]' : 'text-[#0077b5]'}`}
+                    >
+                      {post.source}
+                    </span>
+                    <span>·</span>
+                    <span>{post.user}</span>
+                    <span className="ml-auto">{post.time}</span>
+                  </div>
+                  <p className="mb-2 text-[13px] leading-6">{post.text}</p>
+                  <div className="flex items-center gap-3 text-[11px] text-[#a8a59f]">
+                    <span>{post.stats}</span>
+                    <span className="inline-flex items-center gap-1">
+                      <span className={`size-2 rounded-full ${moodColor[post.mood]}`} />
+                      {post.mood}
+                    </span>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="rounded-lg border border-[#e8e6e0] bg-[#faf9f7] px-4 py-3 text-[12px] text-[#6b6860]">
+                No live conversations found for this platform yet.
+              </div>
+            )}
           </div>
         </div>
       </div>

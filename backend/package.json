@@ -14,7 +14,8 @@
     "posthog-node": "^4.0.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "resend": "^3.2.0"
+    "resend": "^3.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@prisma/adapter-pg": "^7.6.0",

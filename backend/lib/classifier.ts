@@ -75,6 +75,14 @@ const PRIORITY: Archetype[] = [
 // ─── Classifier ───────────────────────────────────────────────────────────────
 
 export function classifyIdea(idea: string): Archetype {
+  return classifyIdeaWithSignals(idea).archetype
+}
+
+export function classifyIdeaWithSignals(idea: string): {
+  archetype: Archetype
+  confidence: number
+  maxScore: number
+} {
   const normalised = idea.toLowerCase()
 
   const scores: Record<Archetype, number> = {
@@ -100,12 +108,48 @@ export function classifyIdea(idea: string): Archetype {
   const maxScore = Math.max(...Object.values(scores))
 
   // If nothing matched at all, default to saas_tool
-  if (maxScore === 0) return 'saas_tool'
+  if (maxScore === 0) {
+    return {
+      archetype: 'saas_tool',
+      confidence: 0,
+      maxScore,
+    }
+  }
 
   // Among archetypes with the max score, pick by priority order
   for (const archetype of PRIORITY) {
-    if (scores[archetype] === maxScore) return archetype
+    if (scores[archetype] === maxScore) {
+      const totalHits = Object.values(scores).reduce((a, b) => a + b, 0)
+      const confidence = totalHits > 0 ? maxScore / totalHits : 0
+      return {
+        archetype,
+        confidence,
+        maxScore,
+      }
+    }
   }
 
-  return 'saas_tool'
+  return {
+    archetype: 'saas_tool',
+    confidence: 0,
+    maxScore,
+  }
+}
+
+export function isLikelyGibberishIdea(idea: string): boolean {
+  const value = idea.trim()
+  if (value.length < 10) return true
+
+  const alpha = (value.match(/[a-z]/gi) ?? []).length
+  const vowels = (value.match(/[aeiou]/gi) ?? []).length
+  const digitsAndSymbols = (value.match(/[^a-z\s]/gi) ?? []).length
+  const words = value.split(/\s+/).filter(Boolean)
+
+  const vowelRatio = alpha > 0 ? vowels / alpha : 0
+  const symbolRatio = value.length > 0 ? digitsAndSymbols / value.length : 1
+
+  const repeatedNoise = /(.)\1{5,}/.test(value)
+  const tooFewWords = words.length <= 2 && value.length > 25
+
+  return repeatedNoise || tooFewWords || vowelRatio < 0.15 || symbolRatio > 0.35
 }
