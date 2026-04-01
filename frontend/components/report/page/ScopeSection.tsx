@@ -1,6 +1,6 @@
 import type { ReportB } from '@/types'
 import { GateOverlay } from './shared'
-import { AIToolLogo, type AIToolName } from './tool-logos'
+import { AIToolLogo } from './tool-logos'
 
 type ScopeSectionProps = {
   reportB: ReportB | null
@@ -12,65 +12,148 @@ type ScopeSectionProps = {
 const CHIP_BASE = 'inline-flex items-center rounded-[6px] px-2.5 py-1 text-[11px] font-medium'
 
 export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSectionProps) {
-  const userChannels: Array<{ platform: string; title: string; body: string; badge?: string; color: string }> = [
-    {
-      platform: 'Reddit',
-      title: 'r/beauty · r/Nails · r/malegrooming',
-      body: 'People actively asking where to find good nail techs. Reply with help, not promo links.',
-      badge: 'Start here',
-      color: '#ff4500',
-    },
-    {
-      platform: 'Instagram',
-      title: 'Instagram - nail tech hashtags',
-      body: 'Your supply side is already here. DM artists directly and recruit founding members.',
-      color: '#d62976',
-    },
-    {
-      platform: 'Facebook',
-      title: 'Local Facebook groups + Nextdoor',
-      body: 'Hyperlocal and high-trust channels where recommendations happen daily.',
-      color: '#1877f2',
-    },
-    {
-      platform: 'TikTok',
-      title: 'TikTok - nail art search',
-      body: 'Show the pain and your workflow fix in short problem-solution clips.',
-      color: '#111111',
-    },
-    {
-      platform: 'Indie Hackers',
-      title: 'Product Hunt + Indie Hackers',
-      body: 'Create an upcoming page and document your build to build early interest.',
-      color: '#0e7f6e',
-    },
-  ]
+  // Map archetype to label
+  const archetypeLabels: Record<string, string> = {
+    marketplace: 'Marketplace',
+    saas_tool: 'SaaS Tool',
+    consumer_app: 'Consumer App',
+    ai_wrapper: 'AI Tool',
+    b2b_platform: 'B2B Platform',
+    community: 'Community',
+    ecommerce: 'E-Commerce',
+    developer_tool: 'Developer Tool',
+  }
+  const archetypeLabel = reportB?.archetype ? archetypeLabels[reportB.archetype] ?? 'Startup' : 'Startup'
+
+  // Derive complexity color
+  const complexityColor = reportB?.complexityLevel === 'Low'
+    ? { border: 'border-[#b5d6bf]', bg: 'bg-[#eaf3ec]', text: 'text-[#1e5c38]', dot: 'bg-[#1e5c38]' }
+    : reportB?.complexityLevel === 'Medium'
+    ? { border: 'border-[#fde68a]', bg: 'bg-[#fffbeb]', text: 'text-[#78350f]', dot: 'bg-[#78350f]' }
+    : { border: 'border-[#fecaca]', bg: 'bg-[#fff7f7]', text: 'text-[#7f1d1d]', dot: 'bg-[#7f1d1d]' }
+
+  // Parse communities from reportB or use fallback
+  const userChannels: Array<{ platform: string; title: string; body: string; badge?: string; color: string }> =
+    reportB?.marketingPlan?.communities?.length
+      ? reportB.marketingPlan.communities.map((community, idx) => {
+          // Parse platform from community string
+          const communityLower = community.toLowerCase()
+          let platform = 'Community'
+          let color = '#6b6860'
+          
+          if (communityLower.includes('reddit') || communityLower.includes('r/')) {
+            platform = 'Reddit'
+            color = '#ff4500'
+          } else if (communityLower.includes('linkedin')) {
+            platform = 'LinkedIn'
+            color = '#0077b5'
+          } else if (communityLower.includes('instagram')) {
+            platform = 'Instagram'
+            color = '#d62976'
+          } else if (communityLower.includes('tiktok')) {
+            platform = 'TikTok'
+            color = '#111111'
+          } else if (communityLower.includes('product hunt') || communityLower.includes('indie')) {
+            platform = 'Indie Hackers'
+            color = '#0e7f6e'
+          }
+          
+          // Find matching activeThread for body text
+          const matchingThread = reportB.marketingPlan?.activeThreads?.find((thread) => {
+            const threadCommunity = thread.community.toLowerCase()
+            return communityLower.includes(threadCommunity) || threadCommunity.includes(communityLower)
+          })
+
+          const fallbackThread = reportB.marketingPlan?.activeThreads?.find((thread) =>
+            communityLower.includes(thread.community.toLowerCase().split(' ')[0])
+          )
+          const threadBody = matchingThread?.suggestedComment ?? fallbackThread?.suggestedComment
+          
+          return {
+            platform,
+            title: community,
+            body: threadBody ?? 'Your target users discuss this problem here regularly.',
+            badge: idx === 0 ? 'Start here' : undefined,
+            color,
+          }
+        })
+      : [
+          {
+            platform: 'Reddit',
+            title: 'r/SaaS · r/startups · r/entrepreneur',
+            body: 'Problem-aware founders ask for tools and workflows here daily. Lead with insight, not promotion.',
+            badge: 'Start here',
+            color: '#ff4500',
+          },
+          {
+            platform: 'LinkedIn',
+            title: 'LinkedIn groups in your target industry',
+            body: 'Decision-makers share operational pain points and tool recommendations in public posts and comments.',
+            color: '#0077b5',
+          },
+          {
+            platform: 'Product Hunt',
+            title: 'Product Hunt upcoming + discussions',
+            body: 'Great channel to test positioning and attract early adopters before launch day.',
+            color: '#0e7f6e',
+          },
+          {
+            platform: 'Indie Hackers',
+            title: 'Indie Hackers build logs and milestones',
+            body: 'Share your validation process and ask for feedback from builders who have launched in similar spaces.',
+            color: '#111111',
+          },
+          {
+            platform: 'Discord',
+            title: 'Niche operator and founder communities',
+            body: 'Smaller private communities often produce the highest quality user interviews and design partners.',
+            color: '#6b6860',
+          },
+        ]
+
+  const coreLoopHeadline = reportB?.techApproach
+    ? (reportB.techApproach.length > 120 ? `${reportB.techApproach.slice(0, 120)}...` : reportB.techApproach)
+    : 'User searches by location -> views nail artist portfolio -> sends a booking request.'
+
+  const complexitySummary = reportB?.complexityExplanation ?? 'Your MVP has moderate implementation complexity. Keep scope tight and prioritize one core user outcome over breadth.'
 
   return (
     <div className="relative">
       <div className={`${!gateUnlocked ? 'pointer-events-none select-none' : ''}`}>
         <div className="mb-3 flex flex-wrap gap-2">
-          <span className="rounded-[5px] bg-[#f0ede6] px-2.5 py-1 text-[11px] text-[#5a574f]">Marketplace</span>
-          <span className="rounded-[5px] bg-[#f0ede6] px-2.5 py-1 text-[11px] text-[#5a574f]">Consumer · B2C</span>
-          <span className="rounded-[5px] border border-[#b5d6bf] bg-[#eaf3ec] px-2.5 py-1 text-[11px] text-[#1e5c38]">Low-Medium complexity</span>
-          <span className="rounded-[5px] bg-[#f0ede6] px-2.5 py-1 text-[11px] text-[#5a574f]">6-8 weeks to build</span>
+          <span className="rounded-[5px] bg-[#f0ede6] px-2.5 py-1 text-[11px] text-[#5a574f]">{archetypeLabel}</span>
+          {/* TODO: Add target user label dynamically when available in ReportB */}
+          {(reportB?.archetype === 'marketplace' || reportB?.archetype === 'consumer_app') && (
+            <span className="rounded-[5px] bg-[#f0ede6] px-2.5 py-1 text-[11px] text-[#5a574f]">Consumer · B2C</span>
+          )}
+          {reportB?.complexityLevel && (
+            <span className={`rounded-[5px] ${complexityColor.border} ${complexityColor.bg} px-2.5 py-1 text-[11px] ${complexityColor.text}`}>
+              {reportB.complexityLevel} complexity
+            </span>
+          )}
         </div>
 
         <p className="mb-2 text-[10px] uppercase tracking-widest text-[#9e9b93]">Your core loop</p>
         <div className="mb-8 rounded-xl bg-[#1c1b18] px-6 py-6 text-white">
           <p className="mb-3 text-[14px] text-white/70">This is the single thing a user does in your product that delivers value.</p>
+          {/* TODO: make this dynamic per archetype when LLM integration ships */}
           <p className="text-[24px] leading-[1.35]" style={{ fontFamily: 'Georgia, serif' }}>
-            User searches by location -&gt; views nail artist portfolio -&gt; sends a booking request.
+            {coreLoopHeadline}
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            {['Search by location', 'View portfolio', 'Send booking request'].map((step, idx) => (
+            {(reportB?.coreFeatures && reportB.coreFeatures.length >= 3
+              ? reportB.coreFeatures.slice(0, 3).map(f => f.name)
+              : ['Search by location', 'View portfolio', 'Send booking request']
+            ).map((step, idx, arr) => (
               <div key={step} className="inline-flex items-center gap-2">
                 <span className="rounded-md border border-white/20 bg-white/10 px-3 py-2 text-[12px]">{step}</span>
-                {idx < 2 && <span className="text-white/35">-&gt;</span>}
+                {idx < arr.length - 1 && <span className="text-white/35">-&gt;</span>}
               </div>
             ))}
           </div>
-          <p className="mt-4 text-[12px] italic text-white/45">If a feature does not support one of these three steps, it does not belong in v1.</p>
+          <p className="mt-4 text-[12px] italic text-white/45">
+            {reportB?.techApproach ?? 'If a feature does not support one of these three steps, it does not belong in v1.'}
+          </p>
         </div>
 
         <div className="mb-8 h-px bg-[#e4e0d8]" />
@@ -93,14 +176,17 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
               <div className="rounded-lg border border-[#b5d6bf] bg-[linear-gradient(180deg,#eef8f1_0%,#e7f2ea_100%)] p-3">
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#1e5c38]">Build now</p>
                 <div className="space-y-1.5">
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#1e5c38]`}>Location search</span>
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#1e5c38]`}>Artist profile</span>
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#1e5c38]`}>Portfolio gallery</span>
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#1e5c38]`}>Booking form</span>
+                  {(reportB?.coreFeatures && reportB.coreFeatures.length > 0
+                    ? reportB.coreFeatures.map(f => f.name)
+                    : ['Core user action', 'Progress/status view', 'Basic onboarding']
+                  ).map(feature => (
+                    <span key={feature} className={`${CHIP_BASE} bg-white/75 text-[#1e5c38]`}>{feature}</span>
+                  ))}
                 </div>
               </div>
               <div className="rounded-lg border border-[#fde68a] bg-[linear-gradient(180deg,#fffdf1_0%,#fdf8df_100%)] p-3">
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#78350f]">Simplify</p>
+                {/* TODO: Add dynamic simplify features when available in ReportB */}
                 <div className="space-y-1.5">
                   <span className={`${CHIP_BASE} bg-white/75 text-[#78350f]`}>In-app payments</span>
                   <span className={`${CHIP_BASE} bg-white/75 text-[#78350f]`}>Availability cal.</span>
@@ -109,6 +195,7 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
               </div>
               <div className="rounded-lg border border-[#bfdbfe] bg-[linear-gradient(180deg,#f4f9ff_0%,#eaf3ff_100%)] p-3">
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#1e3a5f]">Defer</p>
+                {/* TODO: Add dynamic defer features when available in ReportB */}
                 <div className="space-y-1.5">
                   <span className={`${CHIP_BASE} bg-white/75 text-[#1e3a5f]`}>Onboarding flow</span>
                   <span className={`${CHIP_BASE} bg-white/75 text-[#1e3a5f]`}>Saved favourites</span>
@@ -118,9 +205,12 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
               <div className="rounded-lg border border-[#fecaca] bg-[linear-gradient(180deg,#fff7f7_0%,#fdecec_100%)] p-3">
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#7f1d1d]">Skip</p>
                 <div className="space-y-1.5">
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#7f1d1d] line-through`}>AI matching</span>
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#7f1d1d] line-through`}>Subscription tiers</span>
-                  <span className={`${CHIP_BASE} bg-white/75 text-[#7f1d1d] line-through`}>Social feed</span>
+                  {(reportB?.skipFeatures && reportB.skipFeatures.length > 0
+                    ? reportB.skipFeatures.map(f => f.name)
+                    : ['AI matching', 'Subscription tiers', 'Social feed']
+                  ).map(feature => (
+                    <span key={feature} className={`${CHIP_BASE} bg-white/75 text-[#7f1d1d] line-through`}>{feature}</span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -157,6 +247,7 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
               <p className="mb-1 text-[13px] font-medium text-[#1c1b18]">A.C.P. Framework score</p>
               <p className="mb-3 text-[11px] text-[#9e9b93]">Audience · Community · Product</p>
 
+              {/* TODO: Add dynamic A.C.P. scores when available in ReportB */}
               {[
                 ['Audience', '8/10', '80%', '#1e5c38'],
                 ['Community', '6/10', '60%', '#d97706'],
@@ -188,19 +279,22 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
             <div className="flex flex-wrap items-start gap-4">
               <div>
                 <p className="mb-2 text-[10px] uppercase tracking-[0.08em] text-[#9e9b93]">Complexity level</p>
-                <span className="inline-flex items-center gap-2 rounded-[7px] border border-[#b5d6bf] bg-[#eaf3ec] px-3 py-1.5 text-[14px] font-semibold text-[#1e5c38]">
-                  <span className="h-2 w-2 rounded-full bg-[#1e5c38]" />
-                  Low-Medium
-                </span>
+                {reportB?.complexityLevel && (
+                  <span className={`inline-flex items-center gap-2 rounded-[7px] ${complexityColor.border} ${complexityColor.bg} px-3 py-1.5 text-[14px] font-semibold ${complexityColor.text}`}>
+                    <span className={`h-2 w-2 rounded-full ${complexityColor.dot}`} />
+                    {reportB.complexityLevel}
+                  </span>
+                )}
               </div>
               <p className="flex-1 text-[13px] leading-7 text-[#5a574f]">
-                Marketplaces are technically moderate complexity. Core listing and search are straightforward, but two-sided workflows add auth and data modelling overhead.
+                {complexitySummary}
               </p>
             </div>
           </div>
 
           <div className="bg-[#1c1b18] px-5 py-4">
             <p className="mb-2 text-[10px] uppercase tracking-[0.08em] text-white/40">Suggested approach</p>
+            {/* TODO: Make stack chips dynamic based on archetype when available in ReportB */}
             <p className="mb-3 text-[12px] leading-6 text-white/80" style={{ fontFamily: 'var(--font-geist-mono)' }}>
               Next.js for frontend + Supabase for database, auth, and storage. Google Maps API for location. Cal.com embedded for booking. Vercel for hosting.
             </p>
@@ -217,16 +311,19 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
         <div className="mb-3 rounded-xl border border-[#e4e0d8] bg-white p-4">
           <p className="mb-3 text-[10px] uppercase tracking-[0.08em] text-[#9e9b93]">AI tools to build faster</p>
           <div className="mb-3 flex flex-wrap gap-2">
-            {[
-              ['L', 'Lovable', 'Frontend-first, great for UI-heavy apps'],
-              ['C', 'Cursor', 'AI code editor for full-stack builds'],
-              ['V0', 'v0 by Vercel', 'Generate UI components instantly'],
-              ['B', 'Bolt', 'Instant full-stack prototypes'],
-            ].map(([, name, use]) => (
-              <a key={name} href="#" className="inline-flex items-center gap-2 rounded-lg border border-[#e4e0d8] bg-[#f8f6f1] px-3 py-2 text-[12px] text-[#1c1b18] no-underline">
-                <AIToolLogo tool={name as AIToolName} />
-                <span className="font-medium">{name}</span>
-                <span className="text-[#9e9b93]">{use}</span>
+            {(reportB?.aiTools && reportB.aiTools.length > 0
+              ? reportB.aiTools
+              : [
+                  { tool: 'Lovable', useCase: 'Frontend-first, great for UI-heavy apps', url: 'https://lovable.dev' },
+                  { tool: 'Cursor', useCase: 'AI code editor for full-stack builds', url: 'https://cursor.sh' },
+                  { tool: 'v0 by Vercel', useCase: 'Generate UI components instantly', url: 'https://v0.dev' },
+                  { tool: 'Bolt', useCase: 'Instant full-stack prototypes', url: 'https://bolt.new' },
+                ]
+            ).map(({ tool, useCase, url }) => (
+              <a key={tool} href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-[#e4e0d8] bg-[#f8f6f1] px-3 py-2 text-[12px] text-[#1c1b18] no-underline">
+                <AIToolLogo tool={tool} />
+                <span className="font-medium">{tool}</span>
+                <span className="text-[#9e9b93]">{useCase}</span>
               </a>
             ))}
           </div>
@@ -236,11 +333,14 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
         <div className="mb-8">
           <p className="mb-2 text-[10px] uppercase tracking-[0.08em] text-[#9e9b93]">Common mistakes to avoid</p>
           <div className="space-y-2">
-            {[
-              'Building for both sides at once. Solve supply first and manually onboard your first 20 artists in one city.',
-              'Building payments before proving the core loop. Validate booking behavior first.',
-              'Launching nationally too early. Local density wins for marketplace products.',
-            ].map((mistake) => (
+            {(reportB?.commonMistakes && reportB.commonMistakes.length > 0
+              ? reportB.commonMistakes
+              : [
+                  'Building too many features before validating one clear core workflow with real users.',
+                  'Delaying feedback loops until after launch instead of testing with users every week.',
+                  'Over-engineering infrastructure before proving retention and willingness to pay.',
+                ]
+            ).map((mistake) => (
               <div key={mistake} className="flex items-start gap-3 rounded-lg border border-[#fde68a] bg-[#fffbeb] px-4 py-3">
                 <span className="mt-px text-[13px]">⚠</span>
                 <p className="text-[13px] leading-6 text-[#78350f]">{mistake}</p>

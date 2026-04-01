@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendReportEmail } from '@/lib/resend'
+import { prisma } from '@/lib/prisma'
 import type { CaptureEmailRequest, LeadTag, Q4Answer } from '@/types'
 
 // ─── Lead tag logic ───────────────────────────────────────────────────────────
@@ -11,24 +12,6 @@ function deriveLeadTag(q4: Q4Answer | null): LeadTag {
     default:            return 'NURTURE'
   }
 }
-
-// ─── In-memory lead store (replace with DB later) ─────────────────────────────
-// For V0 this holds leads in memory — they reset on server restart.
-// Swap this array for a real DB insert when ready.
-
-type LeadRecord = {
-  sessionId: string
-  email: string
-  archetype: string | null
-  q1: string | null
-  q2: string
-  q3: string | null
-  q4: string | null
-  leadTag: LeadTag
-  capturedAt: string
-}
-
-const leads: LeadRecord[] = []
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,25 +34,35 @@ export async function POST(req: NextRequest) {
     // Derive lead tag from Q4 seriousness answer
     const leadTag = deriveLeadTag(body.q4)
 
-    // Persist lead record
-    const record: LeadRecord = {
-      sessionId: body.sessionId,
-      email: body.email,
-      archetype: body.archetype,
-      q1: body.quiz.q1,
-      q2: body.quiz.q2,
-      q3: body.quiz.q3,
-      q4: body.quiz.q4,
-      leadTag,
-      capturedAt: new Date().toISOString(),
-    }
-
-    // Avoid duplicate entries for the same session
-    const exists = leads.findIndex((l) => l.sessionId === body.sessionId)
-    if (exists >= 0) {
-      leads[exists] = record
-    } else {
-      leads.push(record)
+    // Upsert lead via Prisma. Do not fail the request if DB write fails.
+    try {
+      await prisma.lead.upsert({
+        where: { sessionId: body.sessionId },
+        create: {
+          sessionId: body.sessionId,
+          email: body.email,
+          archetype: body.archetype ?? null,
+          q1: body.quiz.q1 ?? null,
+          q2: body.quiz.q2 ?? null,
+          q3: body.quiz.q3 ?? null,
+          q4: body.quiz.q4 ?? null,
+          leadTag,
+          capturedAt: new Date(),
+        },
+        update: {
+          email: body.email,
+          archetype: body.archetype ?? null,
+          q1: body.quiz.q1 ?? null,
+          q2: body.quiz.q2 ?? null,
+          q3: body.quiz.q3 ?? null,
+          q4: body.quiz.q4 ?? null,
+          leadTag,
+          capturedAt: new Date(),
+        },
+      })
+    } catch (dbError) {
+      console.error('[capture-email] Prisma error:', dbError)
+      // Don't fail the request — email was still sent
     }
 
     // Build the report URL — frontend handles showing the full report
@@ -98,14 +91,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-// ─── Dev-only GET to inspect leads ───────────────────────────────────────────
-// Remove this before going to production
-
-export async function GET() {
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  }
-  return NextResponse.json({ count: leads.length, leads })
 }

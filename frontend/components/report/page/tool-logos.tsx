@@ -2,6 +2,18 @@ import React from 'react'
 
 export type AIToolName = 'Lovable' | 'Cursor' | 'v0 by Vercel' | 'Bolt'
 
+function InitialsLogo({ label }: { label: string }) {
+  const initials = label.trim().slice(0, 2).toUpperCase() || 'AI'
+  return (
+    <span
+      className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#e4e0d8] bg-white"
+      aria-hidden="true"
+    >
+      <span className="text-[10px] font-semibold text-[#6b6860]">{initials}</span>
+    </span>
+  )
+}
+
 function LogoFrame({ children }: { children: React.ReactNode }) {
   return (
     <span
@@ -44,7 +56,7 @@ function CompanyLogo({
   )
 }
 
-export function AIToolLogo({ tool }: { tool: AIToolName }) {
+export function AIToolLogo({ tool }: { tool: string }) {
   if (tool === 'Lovable') {
     return (
       <CompanyLogo
@@ -75,11 +87,15 @@ export function AIToolLogo({ tool }: { tool: AIToolName }) {
     )
   }
 
-  return (
-    <CompanyLogo
-      alt="Bolt"
-      primary="https://logo.clearbit.com/bolt.new"
-      fallback="https://www.google.com/s2/favicons?domain=bolt.new&sz=64"
-    />
-  )
+  if (tool === 'Bolt') {
+    return (
+      <CompanyLogo
+        alt="Bolt"
+        primary="https://logo.clearbit.com/bolt.new"
+        fallback="https://www.google.com/s2/favicons?domain=bolt.new&sz=64"
+      />
+    )
+  }
+
+  return <InitialsLogo label={tool} />
 }

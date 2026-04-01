@@ -20,41 +20,41 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
     : [
         {
           group: 'build_first' as const,
-          title: 'Artist profile + portfolio',
-          body: 'Name, location, style tags, photo gallery of past work. This is why people open the app - it needs to be beautiful and fast.',
+          title: 'Core user action',
+          body: 'The single thing a user opens your product to do. If this is not fast and reliable, nothing else matters.',
         },
         {
           group: 'build_first' as const,
-          title: 'Location-based search',
-          body: 'Simple map or list filtered by city or neighbourhood. This is the core unlock - no existing competitor does this well for independents.',
+          title: 'Basic onboarding flow',
+          body: 'Get a new user to their first value moment in under 2 minutes. This is your most important retention lever.',
         },
         {
           group: 'build_v2' as const,
-          title: 'In-app booking + payments',
-          body: 'Powerful, but complex. Start by sending a WhatsApp or DM booking request. Automate payments once you have 50+ active artists.',
+          title: 'Advanced search and filters',
+          body: 'Start with simple discovery. Add sophisticated filtering once you understand how users actually search.',
         },
         {
           group: 'build_v2' as const,
-          title: 'Reviews and ratings',
-          body: 'Critical for trust long-term, but not needed to get your first 20 artists onboarded. Focus on supply first.',
+          title: 'In-app payments',
+          body: 'Validate the core loop before adding transaction complexity. Start with manual or redirected payment flows.',
         },
         {
           group: 'skip_for_now' as const,
-          title: 'AI style matching',
-          body: 'A nice-to-have but not a need-to-have at this stage. Nail the basics first.',
+          title: 'AI-powered recommendations',
+          body: 'Requires data you do not have yet. Add this in V2 when usage patterns are clear.',
         },
         {
           group: 'skip_for_now' as const,
-          title: 'Subscription tiers for artists',
-          body: 'Monetise through commission per booking first. Pricing tiers add friction before you have proven core value.',
+          title: 'Mobile app',
+          body: 'A responsive web app validates the core loop faster and cheaper. Native app comes after product-market fit.',
         },
       ]
 
   const northStar = plan?.northStarMetric ?? {
-    metric: 'Bookings completed per artist per month',
+    metric: 'Core action completed per user per week',
     explanation:
-      'If each artist gets 5+ bookings per month through your app, you have a product worth building. Below that, improve discovery and trust before adding more features.',
-    target: 'Target: 5+ bookings/artist/month',
+      'If users are completing the core action regularly, your product is working. Below your target, improve the experience before adding features.',
+    target: 'Target: set based on your use case',
     trackingNote: 'Track from day 1',
   }
 
@@ -70,8 +70,8 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
   }
 
   const riskCallout = plan?.riskCallout ?? {
-    title: "Your biggest risk isn't building the wrong product.",
-    body: 'The two-sided marketplace cold start is the core challenge. Onboard supply first in one city before scaling demand.',
+    title: "Your biggest risk is not building the wrong product.",
+    body: 'It is not talking to enough real users before committing to a build. Manual validation is faster and cheaper than code.',
   }
 
   const roadmap: RoadmapItem[] = useMemo(() => {
@@ -84,12 +84,16 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
     }
 
     return [
-      { id: 'W1', label: 'W1', body: 'Talk to 10 suppliers and 10 customers. Confirm willingness and what they value before building.' },
-      { id: 'W2', label: 'W2', body: 'Build a no-code prototype with profile and search. Watch 5 users use it and note friction points.' },
-      { id: 'W3', label: 'W3', body: 'Manually onboard 5 suppliers and route first customer intros. Close the loop by hand.' },
-      { id: 'W4', label: 'W4', body: 'Measure your north star. If signal is weak, return to interviews before adding features.' },
+      { id: 'W1', label: 'W1', body: 'Talk to 10 potential users. Confirm the problem is real and urgent before writing any code.' },
+      { id: 'W2', label: 'W2', body: 'Build a no-code or paper prototype. Watch 5 users interact with it and note every friction point.' },
+      { id: 'W3', label: 'W3', body: 'Build the smallest possible working version of your core loop. Get it in front of 3 real users.' },
+      { id: 'W4', label: 'W4', body: 'Measure your north star metric. If signal is weak, return to user interviews before adding features.' },
     ]
   }, [reportC?.roadmap])
+
+  const isMarketplaceOrEcommerce = reportC?.archetype === 'marketplace' || reportC?.archetype === 'ecommerce'
+  const primaryDatasetLabel = isMarketplaceOrEcommerce ? 'Bookings to reach $1k MRR' : 'Users needed for $1k MRR'
+  const secondaryDatasetLabel = isMarketplaceOrEcommerce ? 'Suppliers needed' : 'Paying users needed'
 
   useEffect(() => {
     if (!economicsCanvasRef.current) return
@@ -109,14 +113,15 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
           labels: unitEconomics.points.map((point) => point.commissionLabel),
           datasets: [
             {
-              label: 'Bookings to reach 1k MRR',
+              // TODO: Keep these labels driven by archetype until API delivers explicit chart legend labels.
+              label: primaryDatasetLabel,
               data: unitEconomics.points.map((point) => point.bookingsToTarget),
               backgroundColor: '#1a1917',
               borderRadius: 6,
               borderSkipped: false,
             },
             {
-              label: 'Artists needed (10 bookings each)',
+              label: secondaryDatasetLabel,
               data: unitEconomics.points.map((point) => point.artistsNeeded),
               backgroundColor: '#d1cec7',
               borderRadius: 6,
@@ -162,7 +167,7 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
       destroyed = true
       if (chart) chart.destroy()
     }
-  }, [unitEconomics.points])
+  }, [primaryDatasetLabel, secondaryDatasetLabel, unitEconomics.points])
 
   const toggleRoadmapItem = (id: string) => {
     setCompletedRoadmap((current) =>
@@ -253,7 +258,9 @@ export function PlanSection({ reportC, gateUnlocked }: PlanSectionProps) {
 
         <div className="grid gap-3 sm:grid-cols-2">
           <a
-            href="#"
+            href="https://creworklabs.com/contact"
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-lg bg-[#1a1917] px-5 py-3 text-center text-[14px] font-semibold text-white transition hover:bg-[#333]"
           >
             Get your full execution plan

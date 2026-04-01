@@ -137,6 +137,7 @@ export default function ReportPage() {
           new Chart(keywordCanvasRef.current, {
             type: 'line',
             data: {
+              // TODO: replace with dynamic keyword data when real API is integrated
               labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
               datasets: [
                 {

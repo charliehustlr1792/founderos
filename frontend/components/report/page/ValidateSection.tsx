@@ -48,13 +48,14 @@ export function ValidateSection({
   platformCanvasRef,
   sentimentCanvasRef,
 }: ValidateSectionProps) {
+  const keywordNote = reportA?.keywordNote?.trim()
   const checklist = weekOneChecklist?.length
     ? weekOneChecklist.slice(0, 4)
     : [
-      'Talk to 10 target users and capture exact pain statements.',
-      'Launch a one-page waitlist and test your core positioning.',
-      'Post in 2 relevant communities and validate response quality.',
-      'Define one primary demand metric to track weekly.',
+      'Talk to 10 target users. Capture their exact words — not your interpretation.',
+      'Launch a one-page waitlist and test your headline with 3 variations.',
+      'Post in 2 relevant communities and measure response quality, not quantity.',
+      'Define one primary demand metric you will track every week from today.',
     ]
 
   const [doneItems, setDoneItems] = useState<boolean[]>([])
@@ -71,15 +72,35 @@ export function ValidateSection({
     <div>
       <div className="mb-10 grid gap-3 md:grid-cols-4">
         {[
-          ['Keyword demand', `${validationMetrics.searchDemand}`, 'High search volume'],
-          ['Community buzz', `${validationMetrics.communityDensity}`, 'Active discussions'],
-          ['Competitor gap', `${validationMetrics.competitionIntensity}`, 'No clear winner'],
-          ['Market timing', `${validationMetrics.overall}`, 'Growing steadily'],
-        ].map(([label, value, meta], idx) => (
-          <div key={label} className="rounded-xl border border-[#e8e6e0] bg-white px-4 py-3.5">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.08em] text-[#a8a59f]">{label}</p>
-            <p className={`mb-1 text-[30px] font-semibold leading-none ${idx < 3 ? 'text-[#2d6a4f]' : 'text-[#92400e]'}`}>{value}</p>
-            <p className="text-[11px] text-[#6b6860]">{meta}</p>
+          {
+            label: 'Overall Score',
+            value: validationMetrics.overall,
+            meta: validationMetrics.overall >= 8 ? 'Strong demand signal' : validationMetrics.overall >= 6 ? 'Moderate signal' : 'Weak signal',
+            color: validationMetrics.overall >= 7 ? 'text-[#2d6a4f]' : validationMetrics.overall >= 5 ? 'text-[#92400e]' : 'text-[#dc2626]'
+          },
+          {
+            label: 'Search Demand',
+            value: validationMetrics.searchDemand,
+            meta: validationMetrics.searchDemand >= 8 ? 'High search volume' : validationMetrics.searchDemand >= 5 ? 'Moderate volume' : 'Low volume',
+            color: validationMetrics.searchDemand >= 7 ? 'text-[#2d6a4f]' : validationMetrics.searchDemand >= 5 ? 'text-[#92400e]' : 'text-[#dc2626]'
+          },
+          {
+            label: 'Community Buzz',
+            value: validationMetrics.communityDensity,
+            meta: validationMetrics.communityDensity >= 8 ? 'Active discussions' : validationMetrics.communityDensity >= 5 ? 'Some activity' : 'Quiet space',
+            color: validationMetrics.communityDensity >= 7 ? 'text-[#2d6a4f]' : validationMetrics.communityDensity >= 5 ? 'text-[#92400e]' : 'text-[#dc2626]'
+          },
+          {
+            label: 'Competition',
+            value: validationMetrics.competitionIntensity,
+            meta: validationMetrics.competitionIntensity >= 8 ? 'Crowded market' : validationMetrics.competitionIntensity >= 5 ? 'Moderate competition' : 'Blue ocean',
+            color: validationMetrics.competitionIntensity >= 8 ? 'text-[#dc2626]' : validationMetrics.competitionIntensity >= 5 ? 'text-[#92400e]' : 'text-[#2d6a4f]'
+          },
+        ].map((card) => (
+          <div key={card.label} className="rounded-xl border border-[#e8e6e0] bg-white px-4 py-3.5">
+            <p className="mb-1 text-[10px] uppercase tracking-[0.08em] text-[#a8a59f]">{card.label}</p>
+            <p className={`mb-1 text-[30px] font-semibold leading-none ${card.color}`}>{card.value}</p>
+            <p className="text-[11px] text-[#6b6860]">{card.meta}</p>
           </div>
         ))}
       </div>
@@ -90,6 +111,7 @@ export function ValidateSection({
           <h2 className="mb-1 text-[14px] font-semibold">How often people are searching for what you are building</h2>
           <p className="mb-5 text-[12px] text-[#6b6860]">Monthly search volume across related keywords.</p>
           <div className="mb-3 flex flex-wrap gap-3 text-[11px] text-[#6b6860]">
+            {/* TODO: replace with dynamic keyword data when real API is integrated */}
             {(reportA?.demandSignals?.slice(0, 3) ?? []).map((signal, idx) => (
               <span key={idx} className="inline-flex items-center gap-1"><span className={`size-2 rounded-sm ${idx === 0 ? 'bg-[#1a1917]' : idx === 1 ? 'bg-[#9ca3af]' : 'bg-[#d1cec7]'}`} />{signal.theme}</span>
             ))}
@@ -220,7 +242,7 @@ export function ValidateSection({
 
           <div className="mb-8 rounded-xl bg-[#1a1917] p-6 text-white">
             <p className="text-[14px] leading-7">
-              <strong>The real opportunity:</strong> {reportA?.keywordNote || 'Users are already solving this pain manually. Your product wins by removing friction from discovery to action.'}
+              <strong>The real opportunity:</strong> {keywordNote || 'Users are already searching for this solution. Your timing is good — the market is past early adopter stage and entering mainstream awareness.'}
             </p>
           </div>
 

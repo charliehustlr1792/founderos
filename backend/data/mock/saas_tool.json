@@ -285,6 +285,76 @@
       "What does handover look like at the end of the engagement? Will I own the code, the repo, and the infrastructure, or will I be dependent on you to make changes?",
       "What's the one thing founders building this type of product usually get wrong that you'd want to flag before we start?"
     ],
+    "whatToBuildPlan": {
+      "buildDecisions": [
+        {
+          "group": "build_first",
+          "title": "Core workflow action",
+          "body": "The single thing your user opens the app to do. Authentication, data model, and this action are your entire V1."
+        },
+        {
+          "group": "build_first",
+          "title": "Status or progress view",
+          "body": "Users need to see that something is happening. A simple list or dashboard view is what brings them back daily."
+        },
+        {
+          "group": "build_v2",
+          "title": "Team collaboration features",
+          "body": "Start with single-user. Add invite flows and shared workspaces once you have retention data."
+        },
+        {
+          "group": "build_v2",
+          "title": "Integrations and API",
+          "body": "Third-party integrations are a retention feature, not an acquisition feature. Ship without them."
+        },
+        {
+          "group": "skip_for_now",
+          "title": "Advanced analytics dashboard",
+          "body": "You do not have enough usage data to know what to measure. Add this in V2 based on what users ask for."
+        },
+        {
+          "group": "skip_for_now",
+          "title": "Mobile app",
+          "body": "Responsive web validates faster. Build native only after product-market fit is clear."
+        }
+      ],
+      "northStarMetric": {
+        "metric": "Core action completed per user per week",
+        "explanation": "If users are completing the core workflow action at least once per week, your SaaS tool is delivering value. Below that threshold, focus on onboarding and activation before adding features.",
+        "target": "Target: 3+ actions/user/week",
+        "trackingNote": "Track from day 1 in PostHog"
+      },
+      "unitEconomics": {
+        "title": "Revenue needed at different price points to reach $1k MRR",
+        "description": "Based on a $29/month starter plan. At $29, you need 35 paying users for $1k MRR.",
+        "points": [
+          {
+            "commissionLabel": "$9/month",
+            "bookingsToTarget": 112,
+            "artistsNeeded": 112
+          },
+          {
+            "commissionLabel": "$29/month",
+            "bookingsToTarget": 35,
+            "artistsNeeded": 35
+          },
+          {
+            "commissionLabel": "$49/month",
+            "bookingsToTarget": 21,
+            "artistsNeeded": 21
+          },
+          {
+            "commissionLabel": "$99/month",
+            "bookingsToTarget": 11,
+            "artistsNeeded": 11
+          }
+        ]
+      },
+      "riskCallout": {
+        "title": "Your biggest risk is not building the wrong thing.",
+        "body": "It is building the right thing for the wrong user. Run 10 user interviews before writing any code. The ones who describe the pain most viscerally are your design partners."
+      }
+    },
     "blogLinks": [
       {
         "label": "The perfect vibe coding stack for building your MVP in 2026",
