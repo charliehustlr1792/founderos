@@ -2,7 +2,6 @@ import { DM_Mono, Instrument_Serif, Inter, Manrope, Space_Grotesk } from 'next/f
 import { LandingHeader } from './sections/LandingHeader'
 import { HeroSection } from './sections/HeroSection'
 import { ProblemSection } from './sections/ProblemSection'
-import { SocialProofSection } from './sections/SocialProofSection'
 import { FinalCtaSection } from './sections/FinalCtaSection'
 import { LandingFooter } from './sections/LandingFooter'
 
@@ -39,14 +38,6 @@ export function LandingPage() {
       />
 
       <ProblemSection headingFontClass={headingFontClass} bodyFontClass={bodyFontClass} />
-
-      <SocialProofSection
-        headingFontClass={headingFontClass}
-        serifFontClass={serifFontClass}
-        monoFontClass={monoFontClass}
-        bodyFontClass={bodyFontClass}
-        uiFontClass={uiFontClass}
-      />
 
       <FinalCtaSection
         headingFontClass={headingFontClass}
