@@ -126,26 +126,6 @@ export function HeroSection({
               Start Your Blueprint
               <ArrowRight className="h-4 w-4" />
             </Link>
-
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-3">
-                {[
-                  'https://i.pravatar.cc/96?img=11',
-                  'https://i.pravatar.cc/96?img=47',
-                  'https://i.pravatar.cc/96?img=32',
-                ].map((avatarSrc, index) => (
-                  <img
-                    key={avatarSrc}
-                    src={avatarSrc}
-                    alt={`Founder ${index + 1}`}
-                    className="h-8 w-8 rounded-lg border-2 border-[#FEF9ED] object-cover"
-                    loading="lazy"
-                  />
-                ))}
-              </div>
-
-              <p className={`text-[11px] text-[#6b7280] ${uiFontClass}`}>Joined by 2,400+ Founders</p>
-            </div>
           </div>
         </div>
 
