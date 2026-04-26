@@ -1,21 +1,28 @@
 'use client'
 import { cn } from '@/lib/utils'
 import type { Q3Answer } from '@/types'
-import { Briefcase, Code2, Network, Users } from 'lucide-react'
+import { Briefcase, Globe, Network, Users } from 'lucide-react'
 
 const OPTIONS: { value: Q3Answer; label: string; mono: string }[] = [
   { value: 'consumer', label: 'EVERYDAY PEOPLE', mono: 'B2C' },
   { value: 'smb', label: 'SMBs', mono: 'SMB' },
   { value: 'enterprise', label: 'TEAMS', mono: 'B2B' },
-  { value: 'developer', label: 'DEVS', mono: 'DEV' },
+  { value: 'other', label: 'OTHER', mono: 'OTHER' },
 ]
 
-export function Q3UserType({ value, onChange }: { value: Q3Answer | null; onChange: (val: Q3Answer) => void }) {
+type Props = {
+  value: Q3Answer | null
+  onChange: (val: Q3Answer) => void
+  otherText: string
+  onOtherTextChange: (val: string) => void
+}
+
+export function Q3UserType({ value, onChange, otherText, onOtherTextChange }: Props) {
   const iconMap = {
     consumer: Users,
     smb: Briefcase,
     enterprise: Network,
-    developer: Code2,
+    other: Globe,
   } as const
 
   return (
@@ -48,6 +55,20 @@ export function Q3UserType({ value, onChange }: { value: Q3Answer | null; onChan
           )
         })}
       </div>
+
+      {value === 'other' && (
+        <div className="mt-1">
+          <input
+            type="text"
+            value={otherText}
+            onChange={(e) => onOtherTextChange(e.target.value)}
+            placeholder="Describe your target group e.g. Healthcare professionals, Gen Z creators..."
+            maxLength={120}
+            className="w-full rounded-md border border-[#E7E2D7] bg-[#FCF8EE] px-4 py-3 text-[14px] leading-6 text-[#0a0a0a] outline-none transition-colors duration-150 placeholder:text-[#a1a1aa] focus:border-[#171717]"
+            style={{ fontFamily: 'var(--font-geist-sans)' }}
+          />
+        </div>
+      )}
     </section>
   )
 }

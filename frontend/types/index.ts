@@ -13,7 +13,7 @@ export type Archetype =
 // ─── Quiz ─────────────────────────────────────────────────────────────────────
 
 export type Q1Answer = 'idea' | 'validation' | 'build'
-export type Q3Answer = 'consumer' | 'smb' | 'enterprise' | 'developer'
+export type Q3Answer = 'consumer' | 'smb' | 'enterprise' | 'other'
 export type Q4Answer = 'exploring' | 'few_convos' | 'waitlist'
 export type RouteKey = 'A' | 'B' | 'C'
 export type LeadTag = 'HOT' | 'WARM' | 'NURTURE'

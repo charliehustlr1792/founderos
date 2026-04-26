@@ -50,6 +50,7 @@ export function QuizShell() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [started, setStarted] = useState(false)
+  const [q3OtherText, setQ3OtherText] = useState('')
 
   const { displayText, fading } = useTypewriter(LOADING_MESSAGES, loading)
 
@@ -90,7 +91,12 @@ export function QuizShell() {
     <div className="mt-6 space-y-12">
       <Q1Stage value={quiz.q1} onChange={(val) => { setQ1(val); analytics.quizQ1Answered(sessionId, val) }} />
       <Q2Idea value={quiz.q2} onChange={setQ2} />
-      <Q3UserType value={quiz.q3} onChange={(val) => { setQ3(val); analytics.quizQ3Answered(sessionId, val) }} />
+      <Q3UserType
+        value={quiz.q3}
+        onChange={(val) => { setQ3(val); analytics.quizQ3Answered(sessionId, val) }}
+        otherText={q3OtherText}
+        onOtherTextChange={setQ3OtherText}
+      />
       <Q4Seriousness value={quiz.q4} onChange={(val) => { setQ4(val); analytics.quizQ4Answered(sessionId, val) }} />
 
       <div className="space-y-4 border-t border-[#DCD5C8]/80 pt-8">

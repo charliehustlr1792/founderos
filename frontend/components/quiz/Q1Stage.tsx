@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@/lib/utils'
 import type { Q1Answer } from '@/types'
-import { Circle, Target, Rocket } from 'lucide-react'
+import { Lightbulb, Target, Rocket } from 'lucide-react'
 
 const OPTIONS: { value: Q1Answer; label: string; sub: string; num: string }[] = [
   { value: 'idea', num: '01', label: 'Still figuring out', sub: 'Exploring multiple concepts and market gaps.' },
@@ -11,7 +11,7 @@ const OPTIONS: { value: Q1Answer; label: string; sub: string; num: string }[] = 
 
 export function Q1Stage({ value, onChange }: { value: Q1Answer | null; onChange: (val: Q1Answer) => void }) {
   const iconMap = {
-    idea: Circle,
+    idea: Lightbulb,
     validation: Target,
     build: Rocket,
   } as const
