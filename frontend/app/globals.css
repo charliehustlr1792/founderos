@@ -116,3 +116,14 @@ html, body {
 .feed-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Hero blueprint card — painted arrow */
+@keyframes arrowFlowDown {
+  to { stroke-dashoffset: -14; }
+}
+@keyframes arrowBob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(3px); }
+}
+.arrow-flow { animation: arrowFlowDown 0.55s linear infinite; }
+.arrow-bob  { animation: arrowBob 1.4s ease-in-out infinite; }

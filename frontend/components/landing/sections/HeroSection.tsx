@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { CardStack } from '@/components/ui/card-stack'
 import { roadmapSteps } from '../landing-data'
+import { HeroBlueprintCard } from './HeroBlueprintCard'
 
 type HeroSectionProps = {
   headingFontClass: string
@@ -20,59 +20,6 @@ export function HeroSection({
   monoFontClass,
   uiFontClass,
 }: HeroSectionProps) {
-  const stackCards = [
-    {
-      id: 1,
-      name: 'Demand Signal',
-      designation: 'Validation',
-      content: (
-        <div>
-          <p className={`text-[10px] uppercase tracking-[0.12em] text-[#D4D4D8] ${monoFontClass}`}>Demand signal</p>
-          <div className="mt-2 rounded-lg border border-white/15 bg-white/8 p-3">
-            <p className={`text-[22px] leading-none text-white ${headingFontClass}`}>9.4/10</p>
-            <p className={`mt-1 text-[11px] text-[#F3F4F6] ${uiFontClass}`}>High validation confidence</p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: 2,
-      name: 'MVP Scope',
-      designation: 'Build Focus',
-      content: (
-        <div>
-          <p className={`text-[10px] uppercase tracking-[0.12em] text-[#D4D4D8] ${monoFontClass}`}>What to build first</p>
-          <ul className={`mt-2 space-y-1.5 text-[12px] leading-5 text-[#F3F4F6] ${bodyFontClass}`}>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />Portfolio profile</li>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />Local discovery search</li>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[#9CA3AF]" />Booking flow v2</li>
-          </ul>
-        </div>
-      ),
-    },
-    {
-      id: 3,
-      name: 'Execution',
-      designation: 'Next 30 Days',
-      content: (
-        <div>
-          <p className={`text-[10px] uppercase tracking-[0.12em] text-[#D4D4D8] ${monoFontClass}`}>Execution path</p>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#111827] text-[10px] text-white">1</span>
-            <p className={`text-[11px] text-[#F3F4F6] ${uiFontClass}`}>Validate interviews</p>
-          </div>
-          <div className="mt-1.5 flex items-center gap-2">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#E5E7EB] text-[10px] text-[#374151]">2</span>
-            <p className={`text-[11px] text-[#F3F4F6] ${uiFontClass}`}>Scope and prototype</p>
-          </div>
-          <p className={`mt-3 text-[12px] italic leading-5 text-[#E5E7EB] ${serifFontClass}`}>
-            "Clarity beats complexity every time."
-          </p>
-        </div>
-      ),
-    },
-  ]
-
   return (
     <section id="blueprint" className="mx-auto w-full max-w-300 px-5 pb-6 pt-5 sm:px-8 lg:pb-9 lg:pt-6">
       <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,520px)_minmax(0,390px)] lg:justify-between">
@@ -129,12 +76,11 @@ export function HeroSection({
           </div>
         </div>
 
-        <div className="relative mx-auto mt-2 w-full max-w-95 lg:mt-0 lg:self-center lg:justify-self-end">
-          {/* <div className="pointer-events-none absolute -left-2 top-2 h-68 w-full rounded-2xl bg-[#EDE5D7]" /> */}
-          <div className="relative">
-            <CardStack items={stackCards} offset={13} scaleFactor={0.07} />
-          </div>
-        </div>
+        <HeroBlueprintCard
+          headingFontClass={headingFontClass}
+          bodyFontClass={bodyFontClass}
+          monoFontClass={monoFontClass}
+        />
       </div>
     </section>
   )
