@@ -135,9 +135,8 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
 
         <p className="mb-2 text-[10px] uppercase tracking-widest text-[#9e9b93]">Your core loop</p>
         <div className="mb-8 rounded-xl bg-[#1c1b18] px-6 py-6 text-white">
-          <p className="mb-3 text-[14px] text-white/70">This is the single thing a user does in your product that delivers value.</p>
-          {/* TODO: make this dynamic per archetype when LLM integration ships */}
-          <p className="text-[24px] leading-[1.35]" style={{ fontFamily: 'Georgia, serif' }}>
+          <p className="mb-3 text-[13px] text-white/50">This is the single thing a user does in your product that delivers value.</p>
+          <p className="text-[22px] leading-[1.35]" style={{ fontFamily: 'Georgia, serif' }}>
             {coreLoopHeadline}
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-2">
@@ -147,13 +146,10 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
             ).map((step, idx, arr) => (
               <div key={step} className="inline-flex items-center gap-2">
                 <span className="rounded-md border border-white/20 bg-white/10 px-3 py-2 text-[12px]">{step}</span>
-                {idx < arr.length - 1 && <span className="text-white/35">-&gt;</span>}
+                {idx < arr.length - 1 && <span className="text-white/35">→</span>}
               </div>
             ))}
           </div>
-          <p className="mt-4 text-[12px] italic text-white/45">
-            {reportB?.techApproach ?? 'If a feature does not support one of these three steps, it does not belong in v1.'}
-          </p>
         </div>
 
         <div className="mb-8 h-px bg-[#e4e0d8]" />
@@ -392,13 +388,9 @@ export function ScopeSection({ reportB, gateUnlocked, onContinuePlan }: ScopeSec
         <button
           type="button"
           onClick={onContinuePlan}
-          className="flex w-full items-center justify-between rounded-xl border border-[#e4e0d8] bg-white px-5 py-4 text-left transition-colors hover:border-[#cbc7bc]"
+          className="w-full rounded-lg bg-[#1a1917] px-5 py-3 text-center text-[14px] font-semibold text-white transition hover:bg-[#333]"
         >
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.08em] text-[#9e9b93]">Next step</p>
-            <p className="text-[14px] font-medium text-[#1c1b18]">How to start - your 30-day launch plan</p>
-          </div>
-          <span className="text-[18px] text-[#9e9b93]">→</span>
+          How to start: your 30-day launch plan →
         </button>
       </div>
 
