@@ -10,12 +10,20 @@ export type FeedPost = {
   text: string
   stats: string
   mood: 'Pain' | 'Wants solution' | 'Building'
+  url: string
 }
 
 export const moodColor: Record<FeedPost['mood'], string> = {
   Pain: 'bg-[#f87171]',
   'Wants solution': 'bg-[#34d399]',
   Building: 'bg-[#60a5fa]',
+}
+
+const platformRoots: Record<FeedPost['platform'], string> = {
+  reddit: 'https://reddit.com',
+  twitter: 'https://twitter.com',
+  ih: 'https://www.indiehackers.com',
+  linkedin: 'https://www.linkedin.com',
 }
 
 export const fallbackPosts: FeedPost[] = [
@@ -27,6 +35,7 @@ export const fallbackPosts: FeedPost[] = [
     text: 'Why is there still no good app to find nail artists in my city? Instagram is hard to search and Yelp mostly shows salons, not independents.',
     stats: '847 upvotes · 64 comments',
     mood: 'Pain',
+    url: 'https://reddit.com/r/beauty',
   },
   {
     platform: 'twitter',
@@ -36,6 +45,7 @@ export const fallbackPosts: FeedPost[] = [
     text: 'Built a simple tool for booking independent nail techs over the weekend. 3 paying customers already. The demand is clearly there.',
     stats: '332 likes · 28 replies',
     mood: 'Building',
+    url: 'https://twitter.com',
   },
   {
     platform: 'reddit',
@@ -45,6 +55,7 @@ export const fallbackPosts: FeedPost[] = [
     text: 'Existing marketplaces are designed for salons, not independent artists. There is a real discoverability gap.',
     stats: '1.2k upvotes · 93 comments',
     mood: 'Wants solution',
+    url: 'https://reddit.com/r/Entrepreneur',
   },
   {
     platform: 'ih',
@@ -54,6 +65,7 @@ export const fallbackPosts: FeedPost[] = [
     text: 'We tried existing local beauty discovery tools. None fit freelancers. Might build this ourselves.',
     stats: '562 likes · 31 comments',
     mood: 'Building',
+    url: 'https://www.indiehackers.com',
   },
   {
     platform: 'linkedin',
@@ -63,6 +75,7 @@ export const fallbackPosts: FeedPost[] = [
     text: 'The independent beauty economy is growing fast, but tooling has not caught up for solo nail techs.',
     stats: '893 reactions · 47 comments',
     mood: 'Wants solution',
+    url: 'https://www.linkedin.com',
   },
 ]
 
@@ -78,6 +91,11 @@ export function toFeedPost(thread: CommunityThread, index: number): FeedPost {
 
   const mood: FeedPost['mood'] = index % 3 === 0 ? 'Pain' : index % 3 === 1 ? 'Wants solution' : 'Building'
 
+  // Build the most specific URL possible from community name
+  const url = platform === 'reddit' && thread.community.startsWith('r/')
+    ? `https://reddit.com/${thread.community}`
+    : platformRoots[platform]
+
   return {
     platform,
     source: thread.community,
@@ -86,6 +104,7 @@ export function toFeedPost(thread: CommunityThread, index: number): FeedPost {
     text: thread.suggestedComment,
     stats: `${140 + index * 17} upvotes · ${12 + index * 4} comments`,
     mood,
+    url,
   }
 }
 

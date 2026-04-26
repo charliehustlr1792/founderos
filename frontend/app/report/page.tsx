@@ -20,6 +20,10 @@ export default function ReportPage() {
   const [loadingRouteA, setLoadingRouteA] = useState(false)
   const [loadingRouteB, setLoadingRouteB] = useState(false)
   const [loadingRouteC, setLoadingRouteC] = useState(false)
+  const [downloadEmail, setDownloadEmail] = useState('')
+  const [downloadLoading, setDownloadLoading] = useState(false)
+  const [downloadSuccess, setDownloadSuccess] = useState(false)
+  const [downloadError, setDownloadError] = useState('')
 
   const {
     sessionId,
@@ -153,6 +157,31 @@ export default function ReportPage() {
       cancelled = true
     }
   }, [activeArchetype, gateUnlocked, section, reportC, quiz, requestKey, setReport])
+
+  const handleDownloadReport = async () => {
+    const emailToUse = (email || downloadEmail).trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailToUse)) {
+      setDownloadError('Please enter a valid email address.')
+      return
+    }
+    setDownloadError('')
+    setDownloadLoading(true)
+    try {
+      if (!email) {
+        const { leadTag } = await api.captureEmail({ email: emailToUse, sessionId, quiz, archetype, q4: quiz.q4 })
+        setEmail(emailToUse)
+        setLeadTag(leadTag)
+        persistToStorage()
+      }
+      await api.sendReport({ email: emailToUse, sessionId })
+      setDownloadSuccess(true)
+    } catch (err) {
+      console.error(err)
+      setDownloadError('Something went wrong. Please try again.')
+    } finally {
+      setDownloadLoading(false)
+    }
+  }
 
   const submitEmailGate = async () => {
     const normalized = gateEmail.trim().toLowerCase()
@@ -395,7 +424,6 @@ export default function ReportPage() {
             {section === 'validate' && (
               <ValidateSection
                 reportA={reportA}
-                weekOneChecklist={reportB?.marketingPlan?.weekOneChecklist}
                 validationMetrics={validationMetrics}
                 filteredPosts={filteredPosts}
                 platform={platform}
@@ -410,15 +438,16 @@ export default function ReportPage() {
                 gateLoading={gateLoading}
                 submitEmailGate={submitEmailGate}
                 onContinueScope={() => setSection('scope')}
-                keywordCanvasRef={(node) => {
-                  keywordCanvasRef.current = node
-                }}
-                platformCanvasRef={(node) => {
-                  platformCanvasRef.current = node
-                }}
-                sentimentCanvasRef={(node) => {
-                  sentimentCanvasRef.current = node
-                }}
+                keywordCanvasRef={(node) => { keywordCanvasRef.current = node }}
+                platformCanvasRef={(node) => { platformCanvasRef.current = node }}
+                sentimentCanvasRef={(node) => { sentimentCanvasRef.current = node }}
+                capturedEmail={email}
+                downloadEmail={downloadEmail}
+                setDownloadEmail={(value) => { setDownloadEmail(value); if (downloadError) setDownloadError('') }}
+                downloadLoading={downloadLoading}
+                downloadSuccess={downloadSuccess}
+                downloadError={downloadError}
+                onDownloadReport={handleDownloadReport}
               />
             )}
 

@@ -51,4 +51,11 @@ export const api = {
       body
     )
   },
+
+  sendReport(body: { email: string; sessionId: string }) {
+    return post<{ email: string; sessionId: string }, { success: boolean }>(
+      '/api/send-report',
+      body
+    )
+  },
 }
